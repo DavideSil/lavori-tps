@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body>
+    <script>
+      const Array = new Array(100);
+      let min = -100;
+      let max = 100;
+      function getRndInteger(min, max) {
+        Array = Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      let somma = 0;
+      for (let i = 0; i < Array.length; i++) {
+        somma += Array[i];
+      }
+      for (let j = 1; j < numeri.length; j++) {
+        if (Array[j] > max) {
+          max = Array[j];
+        }
+        if (Array[j] < min) {
+          min = Array[j];
+        }
+      }
+    </script>
+  </body>
+</html>
