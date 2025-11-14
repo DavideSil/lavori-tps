@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Anagrafica Utente</h2>
+  <div class="container">
+    <div class="form">
+      <p>Nome: <input id="nome"></p>
+      <p>Cognome: <input id="cognome"></p>
+      <p>Indirizzo: <input id="indirizzo"></p>
+      <button onclick="mostraDati()">Mostra dati</button>
+    </div>
+
+    <div class="output" id="risultato">
+      <h3>Dati inseriti:</h3>
+    </div>
+  </div>
+
+  <script>
+    function mostraDati() {
+      let nome = document.getElementById("nome").value;
+      let cognome = document.getElementById("cognome").value;
+      let indirizzo = document.getElementById("indirizzo").value;
+
+      document.getElementById("risultato").innerHTML =
+        "<h3>Dati inseriti:</h3>" +
+        "Nome: " + nome + "<br>" +
+        "Cognome: " + cognome + "<br>" +
+        "Indirizzo: " + indirizzo;
+    }
+    </script>
+
+</body></html>
