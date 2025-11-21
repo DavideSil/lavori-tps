@@ -9,19 +9,19 @@
         <div id="stampa"> </div>
     <script>
     
+      function RiempiArray(min, max) {
       let Array = new Array(100);
       let Nmin = -100;
       let Nmax = 100;
-      function RiempiArray(min, max) {
-        Array = Math.floor(Math.random() * (max - min + 1)) + min;
+        for (let i = 0; i < arr.length; i++) {
+        Array[i] = Math.floor(Math.random() * (max - min + 1)) + min;
     
       let somma = 0;
       for (let i = 0; i < Array.length; i++) {
          let  media; 
         somma += Array[i];
          media = somma / numeri.length;
-      }
-      for (let j = 1; j < numeri.length; j++) {
+  
         let magg;
         let min;
         if (Array[j] > max) {
@@ -30,18 +30,14 @@
         if (Array[j] < min) {
           min = Array[j];
 
-          for (let t = 0; t < Array.length; t++) {
+    
               let NumeriMagg;
   if (Array[t] > 50) {
     NumeriMagg.push(Array[i]);
   }
-}
-
-}
-} 
- }
-RiempiArray(-100, 100);
 document.getElementById("stampa").innerHTML = "<h2>Hello World</h2>";
+}
+RiempiArray(-100, 100);
     </script>
   </body>
 </html>
