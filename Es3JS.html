@@ -8,8 +8,8 @@
   <body>
     <script>
       const Array = new Array(100);
-      let min = -100;
-      let max = 100;
+      let Nmin = -100;
+      let Nmax = 100;
       function getRndInteger(min, max) {
         Array = Math.floor(Math.random() * (max - min + 1)) + min;
       }
@@ -20,14 +20,14 @@
       }
       for (let j = 1; j < numeri.length; j++) {
         if (Array[j] > max) {
-          max = Array[j];
+         let magg = Array[j];
         }
         if (Array[j] < min) {
-          min = Array[j];
+          let min = Array[j];
 
           for (let t = 0; t < Array.length; t++) {
   if (Array[t] > 50) {
-    NumeriMagg.push(Array[i]);
+    let NumeriMagg.push(Array[i]);
   }
 }
           document.write(Array);
