@@ -16,8 +16,7 @@
       let somma = 0;
       for (let i = 0; i < Array.length; i++) {
         somma += Array[i];
-        let media += somma;
-        media
+        let  media = somma / numeri.length;
       }
       for (let j = 1; j < numeri.length; j++) {
         if (Array[j] > max) {
@@ -32,6 +31,7 @@
   }
 }
           document.write(Array);
+          document.write(media);
           
           
         
