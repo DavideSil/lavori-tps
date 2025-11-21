@@ -7,12 +7,12 @@
   </head>
   <body>
     <script>
-      const Array = new Array(100);
+      let Array = new Array(100);
       let Nmin = -100;
       let Nmax = 100;
-      function getRndInteger(min, max) {
+      function RiempiArray(min, max) {
         Array = Math.floor(Math.random() * (max - min + 1)) + min;
-      }
+    
       let somma = 0;
       for (let i = 0; i < Array.length; i++) {
         somma += Array[i];
@@ -26,18 +26,20 @@
           let min = Array[j];
 
           for (let t = 0; t < Array.length; t++) {
+              let NumeriMagg
   if (Array[t] > 50) {
-    let NumeriMagg.push(Array[i]);
+    NumeriMagg.push(Array[i]);
   }
 }
-          document.getElementById(getRndInteger).innerHTML = "<h2>Hello World</h2>";
-          document.write(Array);
-          document.write(media);
-          
-          
-        
-        }
-      }
+
+}
+} 
+ }
+document.getElementById(RiempiArray).innerHTML = "<h2>Hello World</h2>";
+document.getElementById(media).innerHTML = "<h2>Hello World</h2>";
+document.getElementById(magg).innerHTML = "<h2>Hello World</h2>";
+document.getElementById(min).innerHTML = "<h2>Hello World</h2>";
+document.getElementById(NumeriMagg).innerHTML = "<h2>Hello World</h2>";
     </script>
   </body>
 </html>
