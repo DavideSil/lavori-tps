@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>anagrafica</title>
+</head>
+
+  <h2>Inserisci Anagrafica Utente</h2>
+   <form>
+        <label for="nome">Nome:</label><br>
+        <input type="text" id="nome" ><br><br>
+
+        <label for="cognome">Cognome:</label><br>
+        <input type="text" id="cognome" ><br><br>
+
+        <label for="dataNascita">Data di Nascita:</label><br>
+        <input type="date" id="dataNascita"><br><br>
+
+        <label>Sesso:</label><br>
+        <input type="radio" name="sesso" value="M"> Maschio
+        <input type="radio" name="sesso" value="F"> Femmina
+        <input type="radio" name="sesso" value="Altro"> Altro<br><br>
+
+        <label for="indirizzo">Indirizzo:</label><br>
+        <input type="text" id="indirizzo" ><br><br>
+
+        <label for="citta">Città:</label><br>
+        <input type="text" id="citta" ><br><br>
+
+        <label for="cap">CAP:</label><br>
+        <input type="text" id="cap" ><br><br>
+
+        <label for="provincia">Provincia:</label><br>
+        <select id="provincia">
+            <option value="">Seleziona provincia</option>
+            <option value="MI">Milano (MI)</option>
+            <option value="VA">Varese (VA)</option>
+            <option value="NA">Napoli (NA)</option>
+            <option value="RM">Roma (RM)</option>
+        </select><br><br>
+
+        <label>Mezzi di trasporto:</label><br>
+        <input type="checkbox" value="Auto"> Auto
+        <input type="checkbox" value="Moto"> Moto
+        <input type="checkbox" value="Bici"> Bici
+        <input type="checkbox" value="Cavallo"> Cavallo
+        <input type="checkbox" value="Deltaplano"> Deltaplano<br><br>
+
+        <label for="materie">Materie preferite:</label><br>
+        <select id="materie" multiple size="5">
+            <option value="Italiano">Italiano</option>
+            <option value="Storia">Storia</option>
+            <option value="Matematica">Matematica</option>
+            <option value="TPSIT">TPSIT</option>
+            <option value="Informatica">Informatica</option>
+        </select><br><br>
+
+        <button type="button" onclick="calcolaGenerazione()">Invia Dati</button>
+    </form>
+
+    <hr>
+    <div id="risultato"></div>
+
+    <script>
+        function calcolaGenerazione() {
+            let nome = document.getElementById("nome").value;
+            let cognome = document.getElementById("cognome").value;
+            let indirizzo = document.getElementById("indirizzo").value;
+            let citta = document.getElementById("citta").value;
+            let cap = document.getElementById("cap").value;
+            let dataNascita = document.getElementById("dataNascita").value;
+            let provincia = document.getElementById("provincia").value;
+
+
+            let sessoSelezionato = document.querySelector('input[name="sesso"]:checked');
+
+
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            let mezzi = Array.from(checkboxes).map(cb => cb.value);
+
+            let materieSelect = document.getElementById("materie");
+            let materie = Array.from(materieSelect.selectedOptions).map(opt => opt.value);
+
+
+            let eta = "";
+            let generazione = "";
+            if (dataNascita) {
+                let oggi = new Date();
+                let nascita = new Date(dataNascita);
+                let annoNascita = nascita.getFullYear();
+                eta = oggi.getFullYear() - annoNascita;
+
+                if (annoNascita >= 1997 && annoNascita <= 2012) {
+                    generazione = "Generazione Z";
+                } else if (annoNascita >= 1981 && annoNascita <= 1996) {
+                    generazione = "Millennial";
+                } else if (annoNascita >= 1965 && annoNascita <= 1980) {
+                    generazione = "Generazione X";
+                } else if (annoNascita >= 1946 && annoNascita <= 1964) {
+                    generazione = "Baby Boomer";
+                } else {
+                    generazione = "Altra generazione";
+                }
+            }
+
+            // Mostra risultato
+            let risultatoDiv = document.getElementById("risultato");
+            risultatoDiv.innerHTML = `
+                <h3>Dati Registrati:</h3>
+                <p><b>Nome completo:</b> ${nome} ${cognome}</p>
+                <p><b>Data di nascita:</b> ${dataNascita} (${eta} anni - ${generazione})</p>
+                <p><b>Sesso:</b> ${sesso}</p>
+                <p><b>Indirizzo:</b> ${indirizzo}, ${citta} ${cap} (${provincia})</p>
+                <p><b>Mezzi di trasporto:</b> ${mezzi.length > 0 ? mezzi.join(", ") : "Nessuno selezionato"}</p>
+                <p><b>Materie preferite:</b> ${materie.length > 0 ? materie.join(", ") : "Nessuna selezionata"}</p>
+            `;
+        }
+    </script>
+</body>
+
+</html>
