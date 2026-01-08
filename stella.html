@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <canvas id="myCanvas" width="600" height="400"></canvas>
+
+    <script>
+        
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const centerX = 300;
+        const centerY = 200;
+
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 150, 0, Math.PI * 2);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+            
+            const angleOut = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+            const xOut = centerX + Math.cos(angleOut) * 120;
+            const yOut = centerY + Math.sin(angleOut) * 120;
+            
+            if (i === 0) {
+                ctx.moveTo(xOut, yOut);
+            } else {
+                ctx.lineTo(xOut, yOut);
+            }
+            
+            
+            const angleIn = (Math.PI * 2 * i) / 5 - Math.PI / 2 + Math.PI / 5;
+            const xIn = centerX + Math.cos(angleIn) * 50;
+            const yIn = centerY + Math.sin(angleIn) * 50;
+            ctx.lineTo(xIn, yIn);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    </script>
+</body>
+</html>
