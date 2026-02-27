@@ -105,6 +105,22 @@
                 sesso = radioButtons[i].value;
             }
         }
+        let mezzi = [];
+        let checkboxes = document.getElementsByName("mezzo");
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked == true) {
+                mezzi.push(checkboxes[i].value);
+            }
+        }
+
+        // Materie: raccolgo le opzioni selezionate nella listbox
+        let materie = [];
+        let selectMaterie = document.getElementById("materie");
+        for (let i = 0; i < selectMaterie.options.length; i++) {
+            if (selectMaterie.options[i].selected == true) {
+                materie.push(selectMaterie.options[i].value);
+            }
+        }
 
         let annoNascita = new Date(dataNascita).getFullYear();
 
@@ -140,4 +156,5 @@
 </body>
 
 </html>
+
 
