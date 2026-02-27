@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Elenco Anagrafiche</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<h2>Elenco Anagrafiche</h2>
+
+<a href="index.html">indietro</a>
+<br><br>
+
+<div id="contenuto"></div>
+
+<script>
+
+    let elenco    = JSON.parse(localStorage.getItem("elenco"));
+    let contenuto = document.getElementById("contenuto");
+
+    if (elenco == null || elenco.length == 0) {
+
+        contenuto.innerHTML = "<p>Nessuna anagrafica registrata.</p>";
+
+    } else {
+
+        let tabella     = document.createElement("table");
+        tabella.className = "w3-table w3-striped w3-bordered";
+
+        let intestazione = document.createElement("tr");
+
+        let colonne = ["#", "Nome", "Cognome", "Data Nascita", "Eta", "Generazione",
+                       "Sesso", "Indirizzo", "Citta", "CAP", "Provincia", "Mezzi", "Materie"];
+
+        for (let j = 0; j < colonne.length; j++) {
+            let intestazioneColonna = document.createElement("th");
+            intestazioneColonna.textContent = colonne[j];
+            intestazione.appendChild(intestazioneColonna);
+        }
+
+        tabella.appendChild(intestazione);
+
+        for (let i = 0; i < elenco.length; i++) {
+
+            let persona = elenco[i];
+            let riga    = document.createElement("tr");
+
+            let valori = [
+                i + 1,
+                persona.nome,
+                persona.cognome,
+                persona.dataNascita,
+                persona.eta,
+                persona.generazione,
+                persona.sesso,
+                persona.indirizzo,
+                persona.citta,
+                persona.cap,
+                persona.provincia,
+                persona.mezzi.join(", "),
+                persona.materie.join(", ")
+            ];
+
+            for (let j = 0; j < valori.length; j++) {
+                let cella = document.createElement("td");
+                cella.textContent = valori[j];
+                riga.appendChild(cella);
+            }
+
+            tabella.appendChild(riga);
+        }
+
+        contenuto.appendChild(tabella);
+    }
+
+</script>
+
+</body>
+</html>

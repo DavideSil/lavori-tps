@@ -1,4 +1,136 @@
-<html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Anagrafica</title>
+</head>
+<body>
 
-  
+<h2>Inserimento Anagrafica</h2>
+
+<label>Nome</label><br>
+<input type="text" id="nome"><br><br>
+
+<label>Cognome</label><br>
+<input type="text" id="cognome"><br><br>
+
+<label>Data di Nascita</label><br>
+<input type="date" id="dataNascita"><br><br>
+
+<label>Sesso</label><br>
+<input type="radio" name="sesso" value="M"> Maschio
+<input type="radio" name="sesso" value="F"> Femmina
+<input type="radio" name="sesso" value="Altro"> Altro
+<br><br>
+
+<label>Indirizzo</label><br>
+<input type="text" id="indirizzo"><br><br>
+
+<label>Citta</label><br>
+<input type="text" id="citta"><br><br>
+
+<label>CAP</label><br>
+<input type="text" id="cap"><br><br>
+
+<label>Provincia</label><br>
+<select id="provincia">
+    <option value="">Seleziona</option>
+    <option value="MI">Milano</option>
+    <option value="VA">Varese</option>
+    <option value="NA">Napoli</option>
+    <option value="RM">Roma</option>
+</select>
+<br><br>
+
+<label>Mezzi di trasporto</label><br>
+<input type="checkbox" name="mezzo" value="Auto"> Auto
+<input type="checkbox" name="mezzo" value="Moto"> Moto
+<input type="checkbox" name="mezzo" value="Bici"> Bici
+<input type="checkbox" name="mezzo" value="Cavallo"> Cavallo
+<input type="checkbox" name="mezzo" value="Deltaplano"> Deltaplano
+<br><br>
+
+<label>Materie preferite</label><br>
+<select id="materie" multiple size="5">
+    <option value="Italiano">Italiano</option>
+    <option value="Storia">Storia</option>
+    <option value="Matematica">Matematica</option>
+    <option value="TPSIT">TPSIT</option>
+    <option value="Informatica">Informatica</option>
+</select>
+<br><br>
+
+<button onclick="inserisci()">Inserisci</button>
+
+<br><br>
+<a href="stampa.html">Visualizza</a>
+
+<script>
+
+
+    function calcolaGenerazione(anno) {
+        if (anno >= 1946 && anno <= 1964) return "Baby Boomer";
+        if (anno >= 1965 && anno <= 1980) return "Generazione X";
+        if (anno >= 1981 && anno <= 1996) return "Millennial";
+        if (anno >= 1997 && anno <= 2012) return "Generazione Z";
+        if (anno >= 2013)                 return "Generazione Alpha";
+        return "Generazione sconosciuta";
+    }
+
+    function inserisci() {
+
+        let nome        = document.getElementById("nome").value;
+        let cognome     = document.getElementById("cognome").value;
+        let dataNascita = document.getElementById("dataNascita").value;
+        let indirizzo   = document.getElementById("indirizzo").value;
+        let citta       = document.getElementById("citta").value;
+        let cap         = document.getElementById("cap").value;
+        let provincia   = document.getElementById("provincia").value;
+
+        let sessoSelezionato = document.querySelector('input[name="sesso"]:checked');
+        let sesso            = sessoSelezionato ? sessoSelezionato.value : "Non specificato";
+
+        let mezziSelezionati = document.querySelectorAll('input[name="mezzo"]:checked');
+        let mezzi            = Array.from(mezziSelezionati).map(casella => casella.value);
+
+        let materieSelezionate = document.getElementById("materie");
+        let materie            = Array.from(materieSelezionate.selectedOptions).map(opzione => opzione.value);
+
+        if (nome == "" || cognome == "" || dataNascita == "") {
+            alert("Nome, Cognome e Data di Nascita sono obbligatori.");
+            return;
+        }
+
+        let annoNascita = new Date(dataNascita).getFullYear();
+
+        let persona = {};
+        persona.nome        = nome;
+        persona.cognome     = cognome;
+        persona.dataNascita = dataNascita;
+      
+        persona.annoNascita = annoNascita;
+        persona.generazione = calcolaGenerazione(annoNascita);
+        persona.sesso       = sesso;
+        persona.indirizzo   = indirizzo;
+        persona.citta       = citta;
+        persona.cap         = cap;
+        persona.provincia   = provincia;
+        persona.mezzi       = mezzi;
+        persona.materie     = materie;
+
+        let elenco = JSON.parse(localStorage.getItem("elenco"));
+        if (elenco == null) {
+            elenco = [];
+        }
+
+        elenco.push(persona);
+
+        localStorage.setItem("elenco", JSON.stringify(elenco));
+
+        document.getElementById("messaggio").textContent = "Inserito. Totale: " + elenco.length;
+    }
+
+</script>
+
+</body>
 </html>
