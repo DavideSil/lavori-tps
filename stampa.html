@@ -29,7 +29,7 @@
 
         let intestazione = document.createElement("tr");
 
-        let colonne = ["#", "Nome", "Cognome", "Data Nascita", "Eta", "Generazione",
+        let colonne = ["Nome", "Cognome", "Data Nascita", "Eta", "Generazione",
                        "Sesso", "Indirizzo", "Citta", "CAP", "Provincia", "Mezzi", "Materie"];
 
         for (let j = 0; j < colonne.length; j++) {
@@ -45,21 +45,6 @@
             let persona = elenco[i];
             let riga    = document.createElement("tr");
 
-            let valori = [
-                i + 1,
-                persona.nome,
-                persona.cognome,
-                persona.dataNascita,
-                persona.eta,
-                persona.generazione,
-                persona.sesso,
-                persona.indirizzo,
-                persona.citta,
-                persona.cap,
-                persona.provincia,
-                persona.mezzi.join(", "),
-                persona.materie.join(", ")
-            ];
 
             for (let j = 0; j < valori.length; j++) {
                 let cella = document.createElement("td");
@@ -78,3 +63,4 @@
 </body>
 
 </html>
+
