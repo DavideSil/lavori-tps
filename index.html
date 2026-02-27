@@ -18,9 +18,9 @@
 <input type="date" id="dataNascita"><br><br>
 
 <label>Sesso</label><br>
-<input type="radio" name="sesso" value="M"> Maschio
-<input type="radio" name="sesso" value="F"> Femmina
-<input type="radio" name="sesso" value="Altro"> Altro
+<input type="radio" name="sesso" value="m"> Maschio
+<input type="radio" name="sesso" value="f"> Femmina
+<input type="radio" name="sesso" value="altro"> Altro
 <br><br>
 
 <label>Indirizzo</label><br>
@@ -35,10 +35,9 @@
 <label>Provincia</label><br>
 <select id="provincia">
     <option value="">Seleziona</option>
-    <option value="MI">Milano</option>
-    <option value="VA">Varese</option>
-    <option value="NA">Napoli</option>
-    <option value="RM">Roma</option>
+    <option value="milano">Milano</option>
+    <option value="varese">Varese</option>
+    <option value="roma">Roma</option>
 </select>
 <br><br>
 
@@ -49,9 +48,7 @@
 <br><br>
 
 <label>Materie preferite</label><br>
-<select id="materie" multiple size="5">
-    <option value="Italiano">Italiano</option>
-    <option value="Storia">Storia</option>
+<select id="materie">
     <option value="Matematica">Matematica</option>
     <option value="TPSIT">TPSIT</option>
     <option value="Informatica">Informatica</option>
@@ -85,7 +82,6 @@
         let cap         = document.getElementById("cap").value;
         let provincia   = document.getElementById("provincia").value;
 
- 
         let sesso = "Non specificato";
         let radioButtons = document.getElementsByName("sesso");
         for (let i = 0; i < radioButtons.length; i++) {
@@ -108,7 +104,7 @@
             }
         }
 
-        let annoNascita = new Date(dataNascita).getFullYear();
+      
 
         let persona = {};
         persona.nome        = nome;
@@ -142,6 +138,7 @@
 </body>
 
 </html>
+
 
 
 
