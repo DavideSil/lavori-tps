@@ -85,19 +85,7 @@
         let cap         = document.getElementById("cap").value;
         let provincia   = document.getElementById("provincia").value;
 
-        let sessoSelezionato = document.querySelector('input[name="sesso"]:checked');
-        let sesso            = sessoSelezionato ? sessoSelezionato.value : "Non specificato";
-
-        let mezziSelezionati = document.querySelectorAll('input[name="mezzo"]:checked');
-        let mezzi            = Array.from(mezziSelezionati).map(casella => casella.value);
-
-        let materieSelezionate = document.getElementById("materie");
-        let materie            = Array.from(materieSelezionate.selectedOptions).map(opzione => opzione.value);
-
-        if (nome == "" || cognome == "" || dataNascita == "") {
-            alert("Nome, Cognome e Data di Nascita sono obbligatori.");
-            return;
-        }
+ 
         let sesso = "Non specificato";
         let radioButtons = document.getElementsByName("sesso");
         for (let i = 0; i < radioButtons.length; i++) {
@@ -112,8 +100,6 @@
                 mezzi.push(checkboxes[i].value);
             }
         }
-
-        // Materie: raccolgo le opzioni selezionate nella listbox
         let materie = [];
         let selectMaterie = document.getElementById("materie");
         for (let i = 0; i < selectMaterie.options.length; i++) {
@@ -156,5 +142,6 @@
 </body>
 
 </html>
+
 
 
