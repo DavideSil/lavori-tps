@@ -2,12 +2,11 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Elenco Anagrafiche</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>anagrafiche</title>
 </head>
 <body>
 
-<h2>Elenco Anagrafiche</h2>
+<h2>anagrafiche</h2>
 
 <a href="index.html">indietro</a>
 <br><br>
@@ -21,12 +20,12 @@
 
     if (elenco == null || elenco.length == 0) {
 
-        contenuto.innerHTML = "<p>Nessuna anagrafica registrata.</p>";
+        contenuto.innerHTML = "<p>Nessuna anagrafica registrata</p>";
 
     } else {
 
         let tabella     = document.createElement("table");
-        tabella.className = "w3-table w3-striped w3-bordered";
+        
 
         let intestazione = document.createElement("tr");
 
@@ -77,4 +76,5 @@
 </script>
 
 </body>
+
 </html>
