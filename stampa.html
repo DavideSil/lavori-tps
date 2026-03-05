@@ -2,82 +2,148 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>anagrafica</title>
+    <title>Anagrafica</title>
 </head>
 <body>
 
-<h2>anagrafiche</h2>
+<h2>Anagrafiche</h2>
 
-<a href="index.html">indietro</a>
+<a href="index.html">Torna indietro</a>
 <br><br>
 
 <div id="contenuto"></div>
 
 <script>
 
-    let elenco    = JSON.parse(localStorage.getItem("elenco"));
-    let contenuto = document.getElementById("contenuto");
+ let elenco = JSON.parse(localStorage.getItem("elenco"));
 
     if (elenco == null || elenco.length == 0) {
 
-        contenuto.innerHTML = "<p>Nessuna anagrafica registrata</p>";
+        document.getElementById("contenuto").innerHTML = "Nessun record trovato. Torna indietro e inserisci qualcuno.";
 
     } else {
 
-        let tabella     = document.createElement("table");
+        let tabella = document.createElement("table");
         
+        let rigaIntestazione = document.createElement("tr");
 
-        let intestazione = document.createElement("tr");
+        let th1 = document.createElement("th");
+        th1.innerHTML = "Nome";
+        rigaIntestazione.appendChild(th1);
 
-        let colonne = ["Nome", "Cognome", "Data Nascita", "Eta", "Generazione",
-                       "Sesso", "Indirizzo", "Citta", "CAP", "Provincia", "Mezzi", "Materie"];
+        let th2 = document.createElement("th");
+        th2.innerHTML = "Cognome";
+        rigaIntestazione.appendChild(th2);
 
-        for (let j = 0; j < colonne.length; j++) {
-            let intestazioneColonna = document.createElement("th");
-            intestazioneColonna.textContent = colonne[j];
-            intestazione.appendChild(intestazioneColonna);
-        }
-        let valori = [
-            i+1,
-            persona.nome,
-            persona.cognome,
-            persona.dataNascita,
-            persona.eta,
-            persona.generazione,
-            persona.sesso,
-            persona.indirizzo,
-            persona.citta,
-            persona.cap,
-            persona.provincia
-            ];
-            
+        let th3 = document.createElement("th");
+        th3.innerHTML = "Data di Nascita";
+        rigaIntestazione.appendChild(th3);
 
-        tabella.appendChild(intestazione);
+        let th4 = document.createElement("th");
+        th4.innerHTML = "Anno";
+        rigaIntestazione.appendChild(th4);
+
+        let th5 = document.createElement("th");
+        th5.innerHTML = "Generazione";
+        rigaIntestazione.appendChild(th5);
+
+        let th6 = document.createElement("th");
+        th6.innerHTML = "Sesso";
+        rigaIntestazione.appendChild(th6);
+
+        let th7 = document.createElement("th");
+        th7.innerHTML = "Indirizzo";
+        rigaIntestazione.appendChild(th7);
+
+        let th8 = document.createElement("th");
+        th8.innerHTML = "Città";
+        rigaIntestazione.appendChild(th8);
+
+        let th9 = document.createElement("th");
+        th9.innerHTML = "CAP";
+        rigaIntestazione.appendChild(th9);
+
+        let th10 = document.createElement("th");
+        th10.innerHTML = "Provincia";
+        rigaIntestazione.appendChild(th10);
+
+        let th11 = document.createElement("th");
+        th11.innerHTML = "Mezzi";
+        rigaIntestazione.appendChild(th11);
+
+        let th12 = document.createElement("th");
+        th12.innerHTML = "Materia";
+        rigaIntestazione.appendChild(th12);
+
+        tabella.appendChild(rigaIntestazione);
 
         for (let i = 0; i < elenco.length; i++) {
 
+          
             let persona = elenco[i];
-            let riga    = document.createElement("tr");
 
+            let riga = document.createElement("tr");
 
-            for (let j = 0; j < valori.length; j++) {
-                let cella = document.createElement("td");
-                cella.textContent = valori[j];
-                riga.appendChild(cella);
-            }
+            let td0 = document.createElement("td");
+            td0.innerHTML = i + 1; 
+            riga.appendChild(td0);
+
+            let td1 = document.createElement("td");
+            td1.innerHTML = persona.nome;
+            riga.appendChild(td1);
+
+            let td2 = document.createElement("td");
+            td2.innerHTML = persona.cognome;
+            riga.appendChild(td2);
+
+            let td3 = document.createElement("td");
+            td3.innerHTML = persona.dataNascita;
+            riga.appendChild(td3);
+
+            let td4 = document.createElement("td");
+            td4.innerHTML = persona.anno;
+            riga.appendChild(td4);
+
+            let td5 = document.createElement("td");
+            td5.innerHTML = persona.generazione;
+            riga.appendChild(td5);
+
+            let td6 = document.createElement("td");
+            td6.innerHTML = persona.sesso;
+            riga.appendChild(td6);
+
+            let td7 = document.createElement("td");
+            td7.innerHTML = persona.indirizzo;
+            riga.appendChild(td7);
+
+            let td8 = document.createElement("td");
+            td8.innerHTML = persona.citta;
+            riga.appendChild(td8);
+
+            let td9 = document.createElement("td");
+            td9.innerHTML = persona.cap;
+            riga.appendChild(td9);
+
+            let td10 = document.createElement("td");
+            td10.innerHTML = persona.provincia;
+            riga.appendChild(td10);
+
+            let td11 = document.createElement("td");
+            td11.innerHTML = persona.mezzi;
+            riga.appendChild(td11);
+
+            let td12 = document.createElement("td");
+            td12.innerHTML = persona.materia;
+            riga.appendChild(td12);
+
 
             tabella.appendChild(riga);
         }
+        
+        document.getElementById("contenuto").appendChild(tabella);
 
-        contenuto.appendChild(tabella);
     }
 
 </script>
-
 </body>
-
 </html>
-
-
-
-
