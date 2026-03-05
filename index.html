@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h2>Inserimento Anagrafica</h2>
+<h2>Anagrafica</h2>
 
 <label>Nome</label><br>
 <input type="text" id="nome"><br><br>
@@ -18,15 +18,15 @@
 <input type="date" id="dataNascita"><br><br>
 
 <label>Sesso</label><br>
-<input type="radio" name="sesso" value="m"> Maschio
-<input type="radio" name="sesso" value="f"> Femmina
-<input type="radio" name="sesso" value="altro"> Altro
+<input type="radio" name="sesso" value="Maschio"> Maschio
+<input type="radio" name="sesso" value="Femmina"> Femmina
+<input type="radio" name="sesso" value="Altro"> Altro
 <br><br>
 
 <label>Indirizzo</label><br>
 <input type="text" id="indirizzo"><br><br>
 
-<label>Citta</label><br>
+<label>Città</label><br>
 <input type="text" id="citta"><br><br>
 
 <label>CAP</label><br>
@@ -35,20 +35,20 @@
 <label>Provincia</label><br>
 <select id="provincia">
     <option value="">Seleziona</option>
-    <option value="milano">Milano</option>
-    <option value="varese">Varese</option>
-    <option value="roma">Roma</option>
+    <option value="Milano">Milano</option>
+    <option value="Varese">Varese</option>
+    <option value="Roma">Roma</option>
 </select>
 <br><br>
 
-<label>Mezzi di trasporto</label><br>
+<label>Mezzi di Trasporto</label><br>
 <input type="checkbox" name="mezzo" value="Auto"> Auto
 <input type="checkbox" name="mezzo" value="Moto"> Moto
 <input type="checkbox" name="mezzo" value="Bici"> Bici
 <br><br>
 
-<label>Materie preferite</label><br>
-<select id="materie">
+<label>Materia Preferita</label><br>
+<select id="materia">
     <option value="Matematica">Matematica</option>
     <option value="TPSIT">TPSIT</option>
     <option value="Informatica">Informatica</option>
@@ -56,72 +56,89 @@
 <br><br>
 
 <button onclick="inserisci()">Inserisci</button>
-
 <br><br>
+<p id="msg"></p>
+
 <a href="stampa.html">Visualizza</a>
 
 <script>
 
-
-    function calcolaGenerazione(anno) {
-        if (anno >= 1946 && anno <= 1964) return "Baby Boomer";
-        if (anno >= 1965 && anno <= 1980) return "Generazione X";
-        if (anno >= 1981 && anno <= 1996) return "Millennial";
-        if (anno >= 1997 && anno <= 2012) return "Generazione Z";
-        if (anno >= 2013)                 return "Generazione Alpha";
-        return "Generazione sconosciuta";
-    }
-
     function inserisci() {
 
-        let nome        = document.getElementById("nome").value;
-        let cognome     = document.getElementById("cognome").value;
-        let dataNascita = document.getElementById("dataNascita").value;
-        let indirizzo   = document.getElementById("indirizzo").value;
-        let citta       = document.getElementById("citta").value;
-        let cap         = document.getElementById("cap").value;
-        let provincia   = document.getElementById("provincia").value;
+        let nome      = document.getElementById("nome").value;
+        let cognome   = document.getElementById("cognome").value;
+        let data      = document.getElementById("dataNascita").value;
+        let indirizzo = document.getElementById("indirizzo").value;
+        let citta     = document.getElementById("citta").value;
+        let cap       = document.getElementById("cap").value;
+        let provincia = document.getElementById("provincia").value;
+        let materia   = document.getElementById("materia").value;
 
-        let sesso = "Non specificato";
-        let radioButtons = document.getElementsByName("sesso");
-        for (let i = 0; i < radioButtons.length; i++) {
-            if (radioButtons[i].checked == true) {
-                sesso = radioButtons[i].value;
-            }
+        let annoNascita = new Date(data).getFullYear();
+
+        let generazione = "";
+
+        switch (true) {
+            case annoNascita >= 1901 && annoNascita <= 1927:
+                generazione = "Generazione Grandiosa";
+                break;
+            case annoNascita >= 1928 && annoNascita <= 1945:
+                generazione = "Generazione Silenziosa";
+                break;
+            case annoNascita >= 1946 && annoNascita <= 1964:
+                generazione = "Baby Boomers";
+                break;
+            case annoNascita >= 1965 && annoNascita <= 1980:
+                generazione = "Generazione X";
+                break;
+            case annoNascita >= 1981 && annoNascita <= 1996:
+                generazione = "Millennials";
+                break;
+            case annoNascita >= 1997 && annoNascita <= 2012:
+                generazione = "Generazione Z";
+                break;
+            case annoNascita >= 2013:
+                generazione = "Generazione Alpha";
+                break;
+            default:
+                generazione = "Generazione molto vecchia";
+                break;
         }
-        let mezzi = [];
-        let checkboxes = document.getElementsByName("mezzo");
-        for (let i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked == true) {
-                mezzi.push(checkboxes[i].value);
-            }
-        }
-        let materie = [];
-        let selectMaterie = document.getElementById("materie");
-        for (let i = 0; i < selectMaterie.options.length; i++) {
-            if (selectMaterie.options[i].selected == true) {
-                materie.push(selectMaterie.options[i].value);
+
+        let sesso = "";
+        let tuttiIRadioSesso = document.getElementsByName("sesso");
+
+        for (let i = 0; i < tuttiIRadioSesso.length; i++) {
+            if (tuttiIRadioSesso[i].checked == true) {
+                sesso = tuttiIRadioSesso[i].value;
             }
         }
 
-      
+        let mezzi = "";
+        let tutteLeCheckboxMezzo = document.getElementsByName("mezzo");
+
+        for (let i = 0; i < tutteLeCheckboxMezzo.length; i++) {
+            if (tutteLeCheckboxMezzo[i].checked == true) {
+                mezzi = mezzi + tutteLeCheckboxMezzo[i].value + " ";
+            }
+        }
 
         let persona = {};
         persona.nome        = nome;
         persona.cognome     = cognome;
-        persona.dataNascita = dataNascita;
-      
-        persona.annoNascita = annoNascita;
-        persona.generazione = calcolaGenerazione(annoNascita);
+        persona.dataNascita = data;
+        persona.anno        = annoNascita;
+        persona.generazione = generazione;
         persona.sesso       = sesso;
         persona.indirizzo   = indirizzo;
         persona.citta       = citta;
         persona.cap         = cap;
         persona.provincia   = provincia;
         persona.mezzi       = mezzi;
-        persona.materie     = materie;
+        persona.materia     = materia;
 
         let elenco = JSON.parse(localStorage.getItem("elenco"));
+
         if (elenco == null) {
             elenco = [];
         }
@@ -130,16 +147,8 @@
 
         localStorage.setItem("elenco", JSON.stringify(elenco));
 
-        document.getElementById("messaggio").textContent = "Inserito. Totale: " + elenco.length;
     }
 
 </script>
-
 </body>
-
 </html>
-
-
-
-
-
