@@ -71,17 +71,30 @@
     function validaNome() {
         let v = document.getElementById("nome").value;
         const pattern = /^[a-zA-ZàèéìòùÀÈÉÌÒÙ ]+$/;
-        
+        if (!pattern.test(v)) {
+            document.getElementById("msg").innerHTML = "nome non valido";
+            return false;
+        }
+        return true;
     }
 
     function validaCognome() {
         let v = document.getElementById("cognome").value;
         const pattern = /^[a-zA-ZàèéìòùÀÈÉÌÒÙ ]+$/;
-
+        if (!pattern.test(v)) {
+            document.getElementById("msg").innerHTML = "cognome non valido";
+            return false;
+        }
+        return true;
     }
 
     function validaData() {
         let v = document.getElementById("dataNascita").value;
+        if (v == "") {
+            document.getElementById("msg").innerHTML = "data non valida";
+            return false;
+        }
+        return true;
     }
 
     function validaCap() {
@@ -154,6 +167,13 @@
 
     function inserisci() {
 
+        if (!validaNome())          return;
+        if (!validaCognome())       return;
+        if (!validaData())          return;
+        if (!validaCap())           return;
+        if (!validaEmail())         return;
+        if (!validaCodiceFiscale()) return;
+
         let data = document.getElementById("dataNascita").value;
         let anno = new Date(data).getFullYear();
 
@@ -179,9 +199,9 @@
         if (elenco == null) elenco = [];
         elenco.push(persona);
         localStorage.setItem("elenco", JSON.stringify(elenco));
+        
     }
 
 </script>
 </body>
 </html>
-
