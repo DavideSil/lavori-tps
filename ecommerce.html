@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Negozio Online</title>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <strong>LOGO</strong>
+    &nbsp;&nbsp;
+    <a href="#">Home</a> |
+    <a href="#">Prodotti</a> |
+    <a href="#">Chi Siamo</a> |
+    <a href="#">Contatti</a>
+    &nbsp;&nbsp;
+    <button onclick="toggleCart()">Carrello (<span id="cartCount">0</span>)</button>
+  </nav>
+
+  <hr>
+
+  <!-- HERO -->
+  <section>
+    <h1>Titolo principale del sito</h1>
+    <p>Breve descrizione del negozio e dei suoi valori. Questa è la sezione hero dove si presenta il brand.</p>
+    <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Scopri i Prodotti</button>
+  </section>
+
+  <hr>
+
+  <!-- PRODOTTI -->
+  <section id="products">
+    <h2>I Nostri Prodotti</h2>
+    <p>Filtra per categoria:</p>
+    <button onclick="filterProducts('all')">Tutti</button>
+    <button onclick="filterProducts('cat1')">Categoria 1</button>
+    <button onclick="filterProducts('cat2')">Categoria 2</button>
+    <button onclick="filterProducts('cat3')">Categoria 3</button>
+
+    <br><br>
+
+    <div id="productGrid"></div>
+  </section>
+
+  <hr>
+
+  <hr>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>Nome Negozio</strong></p>
+    <p>
+      <a href="#">Prodotti</a> |
+      <a href="#">Chi Siamo</a> |
+      <a href="#">Spedizioni</a> |
+      <a href="#">Contatti</a> |
+      <a href="#">Privacy Policy</a>
+    </p>
+    <p>&copy; 2025 Nome Negozio. Tutti i diritti riservati.</p>
+  </footer>
+
+  <!-- CARRELLO -->
+  <div id="cartPanel" style="display:none; border:1px solid #000; padding:16px; margin-top:16px;">
+    <h3>Il tuo Carrello</h3>
+    <div id="cartItems"><p>Il carrello è vuoto.</p></div>
+    <div id="cartFooter" style="display:none;">
+      <p>Totale: <strong id="cartTotal">€0,00</strong></p>
+      <button>Procedi al Checkout</button>
+    </div>
+    <br>
+    <button onclick="toggleCart()">Chiudi</button>
+  </div>
+
+  <script>
+    const products = [
+      { id:1, name:'Nome Prodotto 1', sub:'Categoria 1', price:49, cat:'cat1' },
+      { id:2, name:'Nome Prodotto 2', sub:'Categoria 1', price:89, cat:'cat1' },
+    ];
+
+    let cart = [];
+
+    function renderProducts(filter) {
+      const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+      document.getElementById('productGrid').innerHTML = filtered.map(p => `
+        <div style="display:inline-block; border:1px solid #ccc; padding:12px; margin:8px; vertical-align:top; width:180px;">
+          <p>[Immagine Prodotto]</p>
+          <strong>${p.name}</strong>
+          <p>${p.sub}</p>
+          <p>€${p.price}</p>
+          <button onclick="addToCart(${p.id})">Aggiungi al Carrello</button>
+        </div>
+      `).join('');
+    }
+
+    function filterProducts(cat) {
+      renderProducts(cat);
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const existing = cart.find(c => c.id === id);
+      if (existing) existing.qty++;
+      else cart.push({ ...product, qty: 1 });
+      updateCartUI();
+      alert('"' + product.name + '" aggiunto al carrello!');
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(c => c.id !== id);
+      updateCartUI();
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(c => c.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) removeFromCart(id);
+      else updateCartUI();
+    }
+
+    function updateCartUI() {
+      const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+      const count = cart.reduce((s, c) => s + c.qty, 0);
+      document.getElementById('cartCount').textContent = count;
+
+      const itemsEl = document.getElementById('cartItems');
+      const footerEl = document.getElementById('cartFooter');
+
+      if (cart.length === 0) {
+        itemsEl.innerHTML = '<p>Il carrello è vuoto.</p>';
+        footerEl.style.display = 'none';
+      } else {
+        itemsEl.innerHTML = cart.map(c => `
+          <div>
+            <strong>${c.name}</strong> — €${c.price} x
+            <button onclick="changeQty(${c.id}, -1)">−</button>
+            ${c.qty}
+            <button onclick="changeQty(${c.id}, +1)">+</button>
+            = €${(c.price * c.qty).toFixed(2).replace('.', ',')}
+            &nbsp;<button onclick="removeFromCart(${c.id})">Rimuovi</button>
+          </div>
+        `).join('');
+        document.getElementById('cartTotal').textContent = '€' + total.toFixed(2).replace('.', ',');
+        footerEl.style.display = 'block';
+      }
+    }
+
+    function toggleCart() {
+      const panel = document.getElementById('cartPanel');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+
+    renderProducts('all');
+  </script>
+
+</body>
+</html>
