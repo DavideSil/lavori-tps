@@ -1,159 +1,217 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Negozio Online</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Hub</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --p: #2c3e50; --a: #3498db; --bg: #f4f7f6; --w: #ffffff; --r: #e74c3c; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg); color: #333; }
+        header { background: var(--p); color: var(--w); padding: 1rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .nav-c { max-width: 1200px; margin: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        nav a { color: var(--w); text-decoration: none; margin-left: 15px; cursor: pointer; font-weight: 500; }
+        section { display: none; padding: 40px 20px; max-width: 1200px; margin: auto; }
+        section.active { display: block; }
+        .grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .card { 
+            background: var(--w); border-radius: 10px; padding: 15px; width: 280px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 5px; margin-bottom: 10px; }
+        .card .price { font-size: 1.2rem; font-weight: bold; color: var(--r); margin: 10px 0; }
+        .card button { background: var(--a); color: var(--w); border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; }
+        .form-box { background: var(--w); padding: 25px; border-radius: 10px; max-width: 450px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .form-box h2 { margin-bottom: 20px; color: var(--p); text-align: center; }
+        .form-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
+        .form-box button { background: var(--p); color: var(--w); border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-size: 1rem; }
+        #msg { color: var(--r); font-size: 0.9rem; margin-bottom: 10px; text-align: center; min-height: 1.2rem; }
+        .cart-table { width: 100%; border-collapse: collapse; background: var(--w); margin-top: 20px; }
+        .cart-table th, .cart-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .total-area { text-align: right; padding: 20px; font-size: 1.5rem; font-weight: bold; }
+        .btn-pdf { background: #27ae60; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; }
+        @media (max-width: 600px) { .nav-c { flex-direction: column; gap: 10px; } .card { width: 100%; } }
+    </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav>
-    <strong>LOGO</strong>
-    &nbsp;&nbsp;
-    <a href="#">Home</a> |
-    <a href="#">Prodotti</a> |
-    <a href="#">Chi Siamo</a> |
-    <a href="#">Contatti</a>
-    &nbsp;&nbsp;
-    <button onclick="toggleCart()">Carrello (<span id="cartCount">0</span>)</button>
-  </nav>
-
-  <hr>
-
-  <!-- HERO -->
-  <section>
-    <h1>Titolo principale del sito</h1>
-    <p>Breve descrizione del negozio e dei suoi valori. Questa è la sezione hero dove si presenta il brand.</p>
-    <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Scopri i Prodotti</button>
-  </section>
-
-  <hr>
-
-  <!-- PRODOTTI -->
-  <section id="products">
-    <h2>I Nostri Prodotti</h2>
-    <p>Filtra per categoria:</p>
-    <button onclick="filterProducts('all')">Tutti</button>
-    <button onclick="filterProducts('cat1')">Categoria 1</button>
-    <button onclick="filterProducts('cat2')">Categoria 2</button>
-    <button onclick="filterProducts('cat3')">Categoria 3</button>
-
-    <br><br>
-
-    <div id="productGrid"></div>
-  </section>
-
-  <hr>
-
-  <hr>
-
-  <!-- FOOTER -->
-  <footer>
-    <p><strong>Nome Negozio</strong></p>
-    <p>
-      <a href="#">Prodotti</a> |
-      <a href="#">Chi Siamo</a> |
-      <a href="#">Spedizioni</a> |
-      <a href="#">Contatti</a> |
-      <a href="#">Privacy Policy</a>
-    </p>
-    <p>&copy; 2025 Nome Negozio. Tutti i diritti riservati.</p>
-  </footer>
-
-  <!-- CARRELLO -->
-  <div id="cartPanel" style="display:none; border:1px solid #000; padding:16px; margin-top:16px;">
-    <h3>Il tuo Carrello</h3>
-    <div id="cartItems"><p>Il carrello è vuoto.</p></div>
-    <div id="cartFooter" style="display:none;">
-      <p>Totale: <strong id="cartTotal">€0,00</strong></p>
-      <button>Procedi al Checkout</button>
+<header>
+    <div class="nav-c">
+        <h1 onclick="view('home')" style="cursor:pointer">ShopX</h1>
+        <nav>
+            <a onclick="view('home')">Negozio</a>
+            <a onclick="view('reg')">Registrati</a>
+            <a onclick="view('login')">Login</a>
+            <a onclick="view('cart')">Carrello (<span id="count">0</span>)</a>
+        </nav>
     </div>
-    <br>
-    <button onclick="toggleCart()">Chiudi</button>
-  </div>
+</header>
 
-  <script>
-    const products = [
-      { id:1, name:'Nome Prodotto 1', sub:'Categoria 1', price:49, cat:'cat1' },
-      { id:2, name:'Nome Prodotto 2', sub:'Categoria 1', price:89, cat:'cat1' },
+<section id="home" class="active">
+    <div id="box-prodotti" class="grid"></div>
+</section>
+
+<section id="reg">
+    <div class="form-box">
+        <h2>Registrazione</h2>
+        <p id="msg"></p>
+        <input type="text" id="nome" placeholder="Nome">
+        <input type="text" id="cognome" placeholder="Cognome">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="pass" placeholder="Password">
+        <input type="text" id="indirizzo" placeholder="Indirizzo">
+        <input type="text" id="cap" placeholder="CAP">
+        <button onclick="validaESalva()">Crea Account</button>
+    </div>
+</section>
+
+<section id="login">
+    <div class="form-box">
+        <h2>Login</h2>
+        <input type="email" id="l-email" placeholder="Email">
+        <input type="password" id="l-pass" placeholder="Password">
+        <button onclick="login()">Accedi</button>
+    </div>
+</section>
+
+<section id="cart">
+    <div id="receipt" style="padding: 30px; background: white;">
+        <h2 style="border-bottom: 2px solid #333; padding-bottom: 10px;">Scontrino Fiscale</h2>
+        <div id="user-info" style="margin: 15px 0; line-height: 1.6;"></div>
+        <table class="cart-table">
+            <thead><tr><th>Descrizione</th><th>Prezzo</th></tr></thead>
+            <tbody id="cart-list"></tbody>
+        </table>
+        <div class="total-area">TOTALE: € <span id="total">0.00</span></div>
+    </div>
+    <div style="text-align:center; margin-top:20px;">
+        <button class="btn-pdf" onclick="stampa()">Paga e Scarica Scontrino (PDF)</button>
+    </div>
+</section>
+
+<script>
+    const db = [
+        { id: 1, n: "Laptop Pro", m: "TechLife", p: 1200.00, i: "https://picsum.photos/id/0/300/200" },
+        { id: 2, n: "Smartphone Z", m: "MobileGo", p: 650.50, i: "https://picsum.photos/id/1/300/200" },
+        { id: 3, n: "Cuffie Noise Cancel", m: "SoundMaster", p: 199.00, i: "https://picsum.photos/id/2/300/200" },
+        { id: 4, n: "Smartwatch", m: "WristIT", p: 150.00, i: "https://picsum.photos/id/3/300/200" }
     ];
 
-    let cart = [];
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let currentUser = JSON.parse(localStorage.getItem('session')) || null;
 
-    function renderProducts(filter) {
-      const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
-      document.getElementById('productGrid').innerHTML = filtered.map(p => `
-        <div style="display:inline-block; border:1px solid #ccc; padding:12px; margin:8px; vertical-align:top; width:180px;">
-          <p>[Immagine Prodotto]</p>
-          <strong>${p.name}</strong>
-          <p>${p.sub}</p>
-          <p>€${p.price}</p>
-          <button onclick="addToCart(${p.id})">Aggiungi al Carrello</button>
-        </div>
-      `).join('');
+    function view(id) {
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'cart') renderCart();
     }
 
-    function filterProducts(cat) {
-      renderProducts(cat);
+    function renderProducts(arr, i, target) {
+        if (i >= arr.length) return;
+        const item = arr[i];
+        const d = document.createElement('div');
+        d.className = 'card';
+        d.innerHTML = `
+            <img src="${item.i}">
+            <h3>${item.n}</h3>
+            <p><small>${item.m}</small></p>
+            <div class="price">€ ${item.p.toFixed(2)}</div>
+            <button onclick="add(${item.id})">Aggiungi al carrello</button>
+        `;
+        target.appendChild(d);
+        renderProducts(arr, i + 1, target);
     }
 
-    function addToCart(id) {
-      const product = products.find(p => p.id === id);
-      const existing = cart.find(c => c.id === id);
-      if (existing) existing.qty++;
-      else cart.push({ ...product, qty: 1 });
-      updateCartUI();
-      alert('"' + product.name + '" aggiunto al carrello!');
+    function add(id) {
+        cart.push(db.find(x => x.id === id));
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCount();
     }
 
-    function removeFromCart(id) {
-      cart = cart.filter(c => c.id !== id);
-      updateCartUI();
+    function updateCount() {
+        document.getElementById('count').innerText = cart.length;
     }
 
-    function changeQty(id, delta) {
-      const item = cart.find(c => c.id === id);
-      if (!item) return;
-      item.qty += delta;
-      if (item.qty <= 0) removeFromCart(id);
-      else updateCartUI();
+    function validaESalva() {
+        const m = document.getElementById("msg");
+        const n = document.getElementById("nome").value;
+        const c = document.getElementById("cognome").value;
+        const e = document.getElementById("email").value;
+        const p = document.getElementById("pass").value;
+        const ind = document.getElementById("indirizzo").value;
+        const cap = document.getElementById("cap").value;
+
+        const regT = /^[a-zA-ZàèéìòùÀÈÉÌÒÙ ]+$/;
+        const regE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+        const regC = /^\d{5}$/;
+
+        if (!regT.test(n)) return m.innerText = "Nome non valido";
+        if (!regT.test(c)) return m.innerText = "Cognome non valido";
+        if (!regE.test(e)) return m.innerText = "Email non valida";
+        if (p.length < 6) return m.innerText = "Password: minimo 6 caratteri";
+        if (ind.length < 5) return m.innerText = "Indirizzo non valido";
+        if (!regC.test(cap)) return m.innerText = "CAP non valido (5 cifre)";
+
+        let u = { nome: n, cognome: c, email: e, pass: p, indirizzo: ind, cap: cap };
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        users.push(u);
+        localStorage.setItem('users', JSON.stringify(users));
+        alert("Registrazione completata!");
+        view('login');
     }
 
-    function updateCartUI() {
-      const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
-      const count = cart.reduce((s, c) => s + c.qty, 0);
-      document.getElementById('cartCount').textContent = count;
-
-      const itemsEl = document.getElementById('cartItems');
-      const footerEl = document.getElementById('cartFooter');
-
-      if (cart.length === 0) {
-        itemsEl.innerHTML = '<p>Il carrello è vuoto.</p>';
-        footerEl.style.display = 'none';
-      } else {
-        itemsEl.innerHTML = cart.map(c => `
-          <div>
-            <strong>${c.name}</strong> — €${c.price} x
-            <button onclick="changeQty(${c.id}, -1)">−</button>
-            ${c.qty}
-            <button onclick="changeQty(${c.id}, +1)">+</button>
-            = €${(c.price * c.qty).toFixed(2).replace('.', ',')}
-            &nbsp;<button onclick="removeFromCart(${c.id})">Rimuovi</button>
-          </div>
-        `).join('');
-        document.getElementById('cartTotal').textContent = '€' + total.toFixed(2).replace('.', ',');
-        footerEl.style.display = 'block';
-      }
+    function login() {
+        const e = document.getElementById('l-email').value;
+        const p = document.getElementById('l-pass').value;
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let u = users.find(x => x.email === e && x.pass === p);
+        if(u) {
+            currentUser = u;
+            localStorage.setItem('session', JSON.stringify(u));
+            alert("Bentornato " + u.nome);
+            view('home');
+        } else alert("Credenziali errate");
     }
 
-    function toggleCart() {
-      const panel = document.getElementById('cartPanel');
-      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    function renderCart() {
+        const list = document.getElementById('cart-list');
+        const info = document.getElementById('user-info');
+        list.innerHTML = '';
+        let tot = 0;
+        cart.forEach(x => {
+            list.innerHTML += `<tr><td>${x.n}</td><td>€ ${x.p.toFixed(2)}</td></tr>`;
+            tot += x.p;
+        });
+        document.getElementById('total').innerText = tot.toFixed(2);
+        
+        if (currentUser) {
+            info.innerHTML = `
+                <strong>Cliente:</strong> ${currentUser.nome.toUpperCase()} ${currentUser.cognome.toUpperCase()}<br>
+                <strong>Spedizione:</strong> ${currentUser.indirizzo.toUpperCase()}, ${currentUser.cap}
+            `;
+        } else {
+            info.innerHTML = "<strong>Cliente:</strong> Ospite";
+        }
     }
 
-    renderProducts('all');
-  </script>
+    function stampa() {
+        if(cart.length === 0) return alert("Carrello vuoto");
+        const element = document.getElementById('receipt');
+        const opt = { margin: 1, filename: 'scontrino.pdf', html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
+        html2pdf().set(opt).from(element).save().then(() => {
+            cart = [];
+            localStorage.removeItem('cart');
+            updateCount();
+            view('home');
+        });
+    }
+
+    window.onload = () => {
+        renderProducts(db, 0, document.getElementById('box-prodotti'));
+        updateCount();
+    };
+</script>
 
 </body>
 </html>
