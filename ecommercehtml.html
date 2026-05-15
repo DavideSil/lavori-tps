@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Scuola</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <h1 onclick="mostraSezione('home')">ShopX</h1>
+        <nav>
+            <a onclick="mostraSezione('home')">Negozio</a>
+            <a onclick="mostraSezione('reg')">Registrati</a>
+            <a onclick="mostraSezione('login')">Login</a>
+            <a onclick="mostraSezione('cart')">Carrello (<span id="count">0</span>)</a>
+        </nav>
+    </div>
+</header>
+
+<section id="home" class="active">
+    <div id="lista-prodotti" class="grid"></div>
+</section>
+
+<section id="reg">
+    <div class="form-box">
+        <h2>Registrazione</h2>
+        <p id="msg-errore" style="color: red; text-align: center;"></p>
+        <input type="text" id="nome" placeholder="Nome">
+        <input type="text" id="cognome" placeholder="Cognome">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="pass" placeholder="Password (min. 6 caratteri)">
+        <input type="text" id="indirizzo" placeholder="Indirizzo">
+        <input type="text" id="cap" placeholder="CAP (5 cifre)">
+        <button onclick="validaESalva()">Crea Account</button>
+    </div>
+</section>
+
+<section id="login">
+    <div class="form-box">
+        <h2>Login</h2>
+        <input type="email" id="l-email" placeholder="Email">
+        <input type="password" id="l-pass" placeholder="Password">
+        <button onclick="login()">Accedi</button>
+    </div>
+</section>
+
+<section id="cart">
+    <div id="area-scontrino" style="padding: 20px; background: white; border: 1px solid #ddd;">
+        <h2>Scontrino Fiscale</h2>
+        <hr>
+        <div id="info-utente" style="margin: 10px 0;"></div>
+        <table class="tabella-carrello" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Prodotto</th>
+                    <th>Prezzo</th>
+                </tr>
+            </thead>
+            <tbody id="lista-carrello"></tbody>
+        </table>
+        <h3 style="text-align: right; margin-top: 20px;">TOTALE: € <span id="totale-prezzo">0.00</span></h3>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <button class="btn-paga" onclick="generaPDF()">Paga e Scarica PDF</button>
+    </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
