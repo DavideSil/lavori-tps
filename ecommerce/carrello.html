@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShop - Carrello Spesa</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">EduShop 🛒</a>
+            <nav>
+                <a href="index.html">Prodotti</a>
+                <a href="registrazione.html">Registrati</a>
+                <a href="carrello.html" class="highlight">Carrello (<span id="num-carrello">0</span>)</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="notifica" class="hidden" style="position: fixed; bottom: 1rem; right: 1rem; z-index: 1000;">
+        <span id="testo-notifica"></span>
+    </div>
+
+    <main>
+        <h2 style="font-size: 1.5rem; font-weight: bold; border-bottom: 1px solid #d1d5db; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Il Tuo Carrello Spesa 🛍️</h2>
+        
+        <div class="cart-layout">
+            <div class="cart-items" id="carrello-articoli"></div>
+
+            <div class="summary-box">
+                <h3 style="font-size: 1.15rem; font-weight: bold; margin-bottom: 1rem;">Riepilogo</h3>
+                <div class="summary-row">
+                    <span>Prodotti in cassa:</span>
+                    <span id="tot-prodotti">0</span>
+                </div>
+                <div class="summary-total">
+                    <span>Totale Speso:</span>
+                    <span id="tot-prezzo" style="color: #2563eb;">0.00 €</span>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <button onclick="concludiAcquisto()" class="btn-cart-action btn-blue">
+                        Acquista (Genera Scontrino PDF)
+                    </button>
+                    <button onclick="scaricaCSVOrdine()" class="btn-cart-action btn-green">
+                        Salva Ordine (Genera CSV)
+                    </button>
+                    <button onclick="svuotaCarrello()" class="btn-cart-action btn-gray">
+                        Svuota Carrello
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 EduShop - Progetto Ecommerce Didattico.</p>
+    </footer>
+
+    <script>
+        let carrello = JSON.parse(localStorage.getItem("carrello")) || [];
+        
+        let utenteLoggato = JSON.parse(localStorage.getItem("utenteLoggato")) || {
+            nome: "Studente",
+            cognome: "Generico",
+            indirizzo: "Via delle Scuole, 10",
+            cap: "20100",
+            citta: "Milano",
+            provincia: "Milano",
+            email: "studente@classe5.edu",
+            codiceFiscale: "STDGNC08A01F205X",
+            dataNascita: "2008-01-01",
+            anno: 2008,
+            generazione: "Generazione Z",
+            sesso: "Maschio",
+            mezzi: "Bici",
+            materia: "Informatica"
+        };
+
+        window.onload = function() {
+            aggiornaInterfacciaCarrello();
+        };
+
+        function avviso(messaggio) {
+            const notifica = document.getElementById('notifica');
+            const testo = document.getElementById('testo-notifica');
+            testo.innerText = messaggio;
+            notifica.classList.remove('hidden');
+            setTimeout(() => { notifica.classList.add('hidden'); }, 2000);
+        }
+
+        function aggiornaInterfacciaCarrello() {
+            const qtaTotale = carrello.reduce((acc, item) => acc + item.quantita, 0);
+            document.getElementById('num-carrello').innerText = qtaTotale;
+            document.getElementById('tot-prodotti').innerText = qtaTotale;
+
+            const divArticoli = document.getElementById('carrello-articoli');
+            if (carrello.length === 0) {
+                divArticoli.innerHTML = `<p style="color: #9ca3af; font-style: italic; font-size: 0.875rem;">Il carrello è vuoto. Torna alla lista dei prodotti per aggiungere articoli.</p>`;
+                document.getElementById('tot-prezzo').innerText = "0.00 €";
+                return;
+            }
+
+            divArticoli.innerHTML = '';
+            let somma = 0;
+            carrello.forEach((item, idx) => {
+                let subtotale = item.prodotto.prezzo * item.quantita;
+                somma += subtotale;
+
+                const riga = document.createElement('div');
+                riga.className = 'cart-item';
+                riga.innerHTML = `
+                    <div class="cart-item-info">
+                        <h4>${item.prodotto.nome}</h4>
+                        <span>${item.prodotto.prezzo.toFixed(2)} € ciascuno</span>
+                    </div>
+                    <div class="quantity-controls">
+                        <button onclick="cambiaQta(${idx}, -1)" class="btn-qty">-</button>
+                        <span style="font-weight: bold; width: 1.5rem; text-align: center;">${item.quantita}</span>
+                        <button onclick="cambiaQta(${idx}, 1)" class="btn-qty">+</button>
+                    </div>
+                    <span class="cart-item-price">${subtotale.toFixed(2)} €</span>
+                `;
+                divArticoli.appendChild(riga);
+            });
+            document.getElementById('tot-prezzo').innerText = somma.toFixed(2) + " €";
+        }
+
+        function cambiaQta(idx, val) {
+            carrello[idx].quantita += val;
+            if (carrello[idx].quantita <= 0) carrello.splice(idx, 1);
+            localStorage.setItem("carrello", JSON.stringify(carrello));
+            aggiornaInterfacciaCarrello();
+        }
+
+        function svuotaCarrello() {
+            carrello = [];
+            localStorage.setItem("carrello", JSON.stringify(carrello));
+            aggiornaInterfacciaCarrello();
+            avviso("Carrello svuotato.");
+        }
+
+        function concludiAcquisto() {
+            if (carrello.length === 0) {
+                avviso("Carrello vuoto!");
+                return;
+            }
+
+            try {
+                const { jsPDF } = window.jspdf;
+                var doc = new jsPDF(); 
+
+                doc.setFont("helvetica", "bold"); 
+                doc.setFontSize(20);
+                
+                doc.text("EDUSHOP S.R.L. - SCONTRINO ACQUISTO", 20, 20);
+
+                doc.line(20, 25, 190, 25);
+
+                doc.setFont("helvetica", "normal"); 
+                doc.setFontSize(11);
+                doc.text("CLIENTE:", 20, 35);
+                doc.setFont("helvetica", "bold");
+                doc.text(utenteLoggato.nome + " " + utenteLoggato.cognome, 45, 35);
+                
+                doc.setFont("helvetica", "normal");
+                doc.text("INDIRIZZO:", 20, 42);
+                doc.text(utenteLoggato.indirizzo + " (CAP: " + utenteLoggato.cap + " - " + (utenteLoggato.citta || "") + ")", 45, 42);
+                
+                doc.text("C.F. / EMAIL:", 20, 49);
+                doc.text(utenteLoggato.codiceFiscale + " | " + utenteLoggato.email, 45, 49);
+
+                if (utenteLoggato.generazione) {
+                    doc.text("GENERAZIONE:", 20, 56);
+                    doc.text(utenteLoggato.generazione + " (Anno: " + utenteLoggato.anno + ")", 50, 56);
+                }
+
+                doc.line(20, 60, 190, 60);
+
+                doc.setFont("helvetica", "bold");
+                doc.text("Articolo", 20, 68);
+                doc.text("Q.ta", 110, 68);
+                doc.text("Prezzo Unitario", 130, 68);
+                doc.text("Totale", 170, 68);
+                doc.line(20, 72, 190, 72);
+
+                let y = 80;
+                let totaleComplessivo = 0;
+                doc.setFont("helvetica", "normal");
+
+                carrello.forEach(item => {
+                    let rigaTot = item.prodotto.prezzo * item.quantita;
+                    totaleComplessivo += rigaTot;
+
+                    doc.text(item.prodotto.nome.substring(0, 30), 20, y);
+                    doc.text(item.quantita.toString(), 112, y);
+                    doc.text(item.prodotto.prezzo.toFixed(2) + " EUR", 130, y);
+                    doc.text(rigaTot.toFixed(2) + " EUR", 170, y);
+                    y += 8;
+                });
+
+                doc.line(20, y, 190, y);
+                y += 10;
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(14);
+                doc.text("TOTALE GENERALE DA PAGARE:", 20, y);
+                doc.text(totaleComplessivo.toFixed(2) + " EUR", 160, y);
+
+                y += 15;
+                doc.setFont("helvetica", "italic");
+                doc.setFontSize(10);
+                doc.text("Questo scontrino e' valido esclusivamente per uso didattico scolastico.", 20, y);
+
+                doc.save("Scontrino_EduShop.pdf");
+
+                avviso("Scontrino PDF generato!");
+            } catch (err) {
+                console.error(err);
+                avviso("Errore durante la creazione del PDF.");
+            }
+        }
+
+        function scaricaCSVOrdine() {
+            if (carrello.length === 0) {
+                avviso("Il carrello è vuoto!");
+                return;
+            }
+
+            const intestazioni = ["NomeCliente", "CognomeCliente", "EMAIL", "CodiceFiscale", "Prodotto", "Marca", "Quantita", "PrezzoUnitario", "PrezzoTotale"];
+            let righeCsv = [];
+            
+            righeCsv.push(intestazioni.join(";"));
+
+            carrello.forEach(item => {
+                let rigaTotale = item.prodotto.prezzo * item.quantita;
+                
+                let riga = [
+                    `"${utenteLoggato.nome}"`,
+                    `"${utenteLoggato.cognome}"`,
+                    `"${utenteLoggato.email}"`,
+                    `"${utenteLoggato.codiceFiscale}"`,
+                    `"${item.prodotto.nome}"`,
+                    `"${item.prodotto.marca}"`,
+                    item.quantita,
+                    item.prodotto.prezzo.toFixed(2),
+                    rigaTotale.toFixed(2)
+                ];
+                righeCsv.push(riga.join(";"));
+            });
+
+            const contenutoCsv = righeCsv.join("\n");
+            const blob = new Blob([contenutoCsv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Ordine_${utenteLoggato.cognome}_EduShop.csv`;
+            link.click();
+            
+            avviso("File CSV dell'ordine scaricato!");
+        }
+    </script>
+</body>
+</html>
