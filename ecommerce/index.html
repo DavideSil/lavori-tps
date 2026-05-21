@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduShop - Catalogo Prodotti</title>
+    <title>ecommerce</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
         <div class="nav-container">
-            <a href="index.html" class="logo">EduShop 🛒</a>
+            <a href="index.html" class="logo">ecommerce 🛒</a>
             <nav>
                 <a href="index.html" class="highlight">Prodotti</a>
                 <a href="registrazione.html">Registrati</a>
@@ -25,22 +25,14 @@
 
     <main>
         <div class="welcome-box">
-            <h2>Benvenuto su EduShop!</h2>
-            <p>Sfoglia i prodotti della nostra classe, registrati per convalidare i tuoi dati anagrafici, ed effettua l'acquisto scaricando lo Scontrino PDF e l'Ordine CSV.</p>
-        </div>
-
-        <div class="filters">
-            <button onclick="filtraCategoria('tutti')" class="btn-filter active" id="btn-tutti">Tutti</button>
-            <button onclick="filtraCategoria('Alimentari')" class="btn-filter" id="btn-Alimentari">Alimentari</button>
-            <button onclick="filtraCategoria('Tecnologia')" class="btn-filter" id="btn-Tecnologia">Tecnologia</button>
-            <button onclick="filtraCategoria('Viaggi')" class="btn-filter" id="btn-Viaggi">Viaggi</button>
+            <h2>Benvenuto</h2>
         </div>
 
         <div id="lista-prodotti" class="grid-prodotti"></div>
     </main>
 
     <footer>
-        <p>&copy; 2026 EduShop - Progetto Ecommerce Didattico.</p>
+        <p>&copy; 2026 ecommerce - Progetto Didattico.</p>
     </footer>
 
     <script>
@@ -84,7 +76,6 @@
         ];
 
         let carrello = JSON.parse(localStorage.getItem("carrello")) || [];
-        let filtroCorrente = 'tutti';
 
         window.onload = function() {
             aggiornaGrigliaProdotti();
@@ -109,22 +100,6 @@
             classi: 'product-card',
             figli: [
                 { tag: 'img', classi: 'product-img', chiaveSorgente: 'immagine' },
-                {
-                    tag: 'div',
-                    figli: [
-                        { tag: 'span', classi: 'brand-label', chiaveTesto: 'marca' },
-                        { tag: 'h3', classi: 'product-title', chiaveTesto: 'nome' },
-                        { tag: 'p', classi: 'product-desc', chiaveTesto: 'descrizione' }
-                    ]
-                },
-                {
-                    tag: 'div',
-                    classi: 'product-info-box',
-                    figli: [
-                        { tag: 'div', chiaveTesto: 'provenienza', prefisso: 'Origine: ' },
-                        { tag: 'div', chiaveTesto: 'dimensions', prefisso: 'Formato: ' }
-                    ]
-                },
                 {
                     tag: 'div',
                     classi: 'product-footer',
@@ -169,25 +144,8 @@
             if (!contenitore) return;
             contenitore.innerHTML = '';
             prodotti.forEach((p, i) => {
-                if (filtroCorrente !== 'tutti' && p.categoria !== filtroCorrente) return;
                 contenitore.appendChild(creaElementoRicorsivo(schemaBoxProdotto, p, i));
             });
-        }
-
-        function filtraCategoria(cat) {
-            filtroCorrente = cat;
-            
-            const bottoni = ['tutti', 'Alimentari', 'Tecnologia', 'Viaggi'];
-            bottoni.forEach(b => {
-                const btn = document.getElementById('btn-' + b);
-                if (b === cat) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            aggiornaGrigliaProdotti();
         }
 
         function aggiungiAlCarrello(indice) {
