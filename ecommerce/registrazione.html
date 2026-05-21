@@ -10,7 +10,7 @@
 
     <header>
         <div class="nav-container">
-            <a href="index.html" class="logo">ecommerce 🛒</a>
+            <a href="index.html" class="logo">ecommerce</a>
             <nav>
                 <a href="index.html">Prodotti</a>
                 <a href="registrazione.html" class="highlight">Registrati</a>
@@ -25,7 +25,7 @@
 
     <main>
         <div class="form-container">
-            <h2 class="form-title">Anagrafica Utente 📝</h2>
+            <h2 class="form-title">registrazione</h2>
             
             <div id="msg" class="error-msg"></div>
 
@@ -63,13 +63,13 @@
                     </div>
                 </div>
 
-                <button type="button" onclick="inserisci()" class="btn-submit">Inserisci e Conferma</button>
+                <button type="button" onclick="inserisci()" class="btn-submit">registrati</button>
             </form>
         </div>
     </main>
 
     <footer>
-        <p>&copy; 2026 ecommerce - Progetto Didattico.</p>
+        <p>&copy; 2026 ecommerce</p>
     </footer>
 
     <script>
@@ -77,8 +77,8 @@
         document.getElementById('num-carrello').innerText = carrello.reduce((acc, item) => acc + item.quantita, 0);
 
         function avviso(messaggio) {
-            const notifica = document.getElementById('notifica');
-            const testo = document.getElementById('testo-notifica');
+            let notifica = document.getElementById('notifica');
+            let testo = document.getElementById('testo-notifica');
             testo.innerText = messaggio;
             notifica.classList.remove('hidden');
             setTimeout(() => { notifica.classList.add('hidden'); }, 2000);
@@ -86,7 +86,7 @@
 
         function validaNome() {
             let v = document.getElementById("nome").value;
-            const pattern = /^[a-zA-ZàèéìòùÀÈÉÌÒÙ ]+$/;
+            let pattern = /^[a-zA-ZàèéìòùÀÈÉÌÒÙ ]+$/;
             if (!pattern.test(v)) {
                 document.getElementById("msg").innerHTML = "nome non valido";
                 return false;
@@ -96,7 +96,7 @@
 
         function validaCognome() {
             let v = document.getElementById("cognome").value;
-            const pattern = /^[a-zA-ZàèéìòùÀÈÉÌÒÙ ]+$/;
+            let pattern = /^[a-zA-ZàèéìòùÀÈÉÌÒÙ ]+$/;
             if (!pattern.test(v)) {
                 document.getElementById("msg").innerHTML = "cognome non valido";
                 return false;
@@ -106,7 +106,7 @@
 
         function validaCap() {
             let v = document.getElementById("cap").value;
-            const pattern = /^\d{5}$/;
+            let pattern = /^\d{5}$/;
             if (!pattern.test(v)) {
                 document.getElementById("msg").innerHTML = "cap non valido";
                 return false;
@@ -116,7 +116,7 @@
 
         function validaEmail() {
             let v = document.getElementById("email").value;
-            const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+            let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
             if (!pattern.test(v)) {
                 document.getElementById("msg").innerHTML = "email non valido";
                 return false;
@@ -150,8 +150,7 @@
             persona.email     = document.getElementById("email").value;
             persona.password  = document.getElementById("pass").value;
 
-            let elenco = JSON.parse(localStorage.getItem("elenco"));
-            if (elenco == null) elenco = [];
+            let elenco = JSON.parse(localStorage.getItem("elenco")) || [];
             elenco.push(persona);
             localStorage.setItem("elenco", JSON.stringify(elenco));
 
