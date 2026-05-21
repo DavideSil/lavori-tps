@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShop - Catalogo Prodotti</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">EduShop 🛒</a>
+            <nav>
+                <a href="index.html" class="highlight">Prodotti</a>
+                <a href="registrazione.html">Registrati</a>
+                <a href="carrello.html">Carrello (<span id="num-carrello">0</span>)</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="notifica" class="hidden" style="position: fixed; bottom: 1rem; right: 1rem; z-index: 1000;">
+        <span id="testo-notifica"></span>
+    </div>
+
+    <main>
+        <div class="welcome-box">
+            <h2>Benvenuto su EduShop!</h2>
+            <p>Sfoglia i prodotti della nostra classe, registrati per convalidare i tuoi dati anagrafici, ed effettua l'acquisto scaricando lo Scontrino PDF e l'Ordine CSV.</p>
+        </div>
+
+        <div class="filters">
+            <button onclick="filtraCategoria('tutti')" class="btn-filter active" id="btn-tutti">Tutti</button>
+            <button onclick="filtraCategoria('Alimentari')" class="btn-filter" id="btn-Alimentari">Alimentari</button>
+            <button onclick="filtraCategoria('Tecnologia')" class="btn-filter" id="btn-Tecnologia">Tecnologia</button>
+            <button onclick="filtraCategoria('Viaggi')" class="btn-filter" id="btn-Viaggi">Viaggi</button>
+        </div>
+
+        <div id="lista-prodotti" class="grid-prodotti"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 EduShop - Progetto Ecommerce Didattico.</p>
+    </footer>
+
+    <script>
+        let prodotti = [
+            {
+                nome: "Miele Millefiori",
+                marca: "Apicoltura Rossi",
+                descrizione: "Miele biologico e naturale 100% italiano ricavato da fiori di collina.",
+                immagine: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=400&q=80",
+                prezzo: 6.50,
+                dimensions: "250g",
+                taglio: "Vasetto",
+                giorni_di_viaggio: "",
+                provenienza: "Toscana",
+                categoria: "Alimentari"
+            },
+            {
+                nome: "Cuffie Stereo",
+                marca: "Klang",
+                descrizione: "Cuffie sovraurali antirumore ideali per studio, musica o PC d'istituto.",
+                immagine: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80",
+                prezzo: 24.90,
+                dimensions: "Standard",
+                taglio: "Unico",
+                giorni_di_viaggio: "",
+                provenienza: "Unione Europea",
+                categoria: "Tecnologia"
+            },
+            {
+                nome: "Gita di Trekking",
+                marca: "AlpinClub",
+                descrizione: "Una giornata intera immersi nella natura con guide alpine certificate.",
+                immagine: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80",
+                prezzo: 45.00,
+                dimensions: "Non applicabile",
+                taglio: "Unico",
+                giorni_di_viaggio: "1",
+                provenienza: "Alpi italiane",
+                categoria: "Viaggi"
+            }
+        ];
+
+        let carrello = JSON.parse(localStorage.getItem("carrello")) || [];
+        let filtroCorrente = 'tutti';
+
+        window.onload = function() {
+            aggiornaGrigliaProdotti();
+            aggiornaBadgeCarrello();
+        };
+
+        function avviso(messaggio) {
+            const notifica = document.getElementById('notifica');
+            const testo = document.getElementById('testo-notifica');
+            testo.innerText = messaggio;
+            notifica.classList.remove('hidden');
+            setTimeout(() => { notifica.classList.add('hidden'); }, 2000);
+        }
+
+        function aggiornaBadgeCarrello() {
+            const qtaTotale = carrello.reduce((acc, item) => acc + item.quantita, 0);
+            document.getElementById('num-carrello').innerText = qtaTotale;
+        }
+
+        const schemaBoxProdotto = {
+            tag: 'div',
+            classi: 'product-card',
+            figli: [
+                { tag: 'img', classi: 'product-img', chiaveSorgente: 'immagine' },
+                {
+                    tag: 'div',
+                    figli: [
+                        { tag: 'span', classi: 'brand-label', chiaveTesto: 'marca' },
+                        { tag: 'h3', classi: 'product-title', chiaveTesto: 'nome' },
+                        { tag: 'p', classi: 'product-desc', chiaveTesto: 'descrizione' }
+                    ]
+                },
+                {
+                    tag: 'div',
+                    classi: 'product-info-box',
+                    figli: [
+                        { tag: 'div', chiaveTesto: 'provenienza', prefisso: 'Origine: ' },
+                        { tag: 'div', chiaveTesto: 'dimensions', prefisso: 'Formato: ' }
+                    ]
+                },
+                {
+                    tag: 'div',
+                    classi: 'product-footer',
+                    figli: [
+                        { tag: 'span', classi: 'product-price', chiaveTesto: 'prezzo' },
+                        { tag: 'button', classi: 'btn-add', testofisso: 'Aggiungi' }
+                    ]
+                }
+            ]
+        };
+
+        function creaElementoRicorsivo(nodo, datiProdotto, indiceProdotto) {
+            const el = document.createElement(nodo.tag);
+            if (nodo.classi) el.className = nodo.classi;
+            
+            if (nodo.tag === 'img' && nodo.chiaveSorgente) {
+                el.src = datiProdotto[nodo.chiaveSorgente];
+                el.alt = datiProdotto.nome;
+            }
+            if (nodo.chiaveTesto) {
+                let valore = datiProdotto[nodo.chiaveTesto];
+                if (nodo.tag === 'span' && nodo.classi && nodo.classi.includes('product-price')) {
+                    valore = parseFloat(valore).toFixed(2) + " €";
+                }
+                el.innerText = (nodo.prefisso || '') + valore;
+            }
+            if (nodo.testofisso) {
+                el.innerText = nodo.testofisso;
+                el.onclick = function() { aggiungiAlCarrello(indiceProdotto); };
+            }
+
+            if (nodo.figli && Array.isArray(nodo.figli)) {
+                nodo.figli.forEach(figlio => {
+                    el.appendChild(creaElementoRicorsivo(figlio, datiProdotto, indiceProdotto));
+                });
+            }
+            return el;
+        }
+
+        function aggiornaGrigliaProdotti() {
+            const contenitore = document.getElementById('lista-prodotti');
+            if (!contenitore) return;
+            contenitore.innerHTML = '';
+            prodotti.forEach((p, i) => {
+                if (filtroCorrente !== 'tutti' && p.categoria !== filtroCorrente) return;
+                contenitore.appendChild(creaElementoRicorsivo(schemaBoxProdotto, p, i));
+            });
+        }
+
+        function filtraCategoria(cat) {
+            filtroCorrente = cat;
+            
+            const bottoni = ['tutti', 'Alimentari', 'Tecnologia', 'Viaggi'];
+            bottoni.forEach(b => {
+                const btn = document.getElementById('btn-' + b);
+                if (b === cat) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            aggiornaGrigliaProdotti();
+        }
+
+        function aggiungiAlCarrello(indice) {
+            const prod = prodotti[indice];
+            const trovato = carrello.find(item => item.prodotto.nome === prod.nome);
+            if (trovato) {
+                trovato.quantita += 1;
+            } else {
+                carrello.push({ prodotto: prod, quantita: 1 });
+            }
+            localStorage.setItem("carrello", JSON.stringify(carrello));
+            aggiornaBadgeCarrello();
+            avviso("Aggiunto al carrello!");
+        }
+    </script>
+</body>
+</html>
