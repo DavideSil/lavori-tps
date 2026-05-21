@@ -10,7 +10,7 @@
 
     <header>
         <div class="nav-container">
-            <a href="index.html" class="logo">ecommerce 🛒</a>
+            <a href="index.html" class="logo">ecommerce</a>
             <nav>
                 <a href="index.html" class="highlight">Prodotti</a>
                 <a href="registrazione.html">Registrati</a>
@@ -32,7 +32,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 ecommerce - Progetto Didattico.</p>
+        <p>&copy; 2026 ecommerce</p>
     </footer>
 
     <script>
@@ -83,23 +83,24 @@
         };
 
         function avviso(messaggio) {
-            const notifica = document.getElementById('notifica');
-            const testo = document.getElementById('testo-notifica');
+            let notifica = document.getElementById('notifica');
+            let testo = document.getElementById('testo-notifica');
             testo.innerText = messaggio;
             notifica.classList.remove('hidden');
             setTimeout(() => { notifica.classList.add('hidden'); }, 2000);
         }
 
         function aggiornaBadgeCarrello() {
-            const qtaTotale = carrello.reduce((acc, item) => acc + item.quantita, 0);
+            let qtaTotale = carrello.reduce((acc, item) => acc + item.quantita, 0);
             document.getElementById('num-carrello').innerText = qtaTotale;
         }
 
-        const schemaBoxProdotto = {
+        let schemaBoxProdotto = {
             tag: 'div',
             classi: 'product-card',
             figli: [
                 { tag: 'img', classi: 'product-img', chiaveSorgente: 'immagine' },
+                { tag: 'h3', classi: 'product-title', chiaveTesto: 'nome' },
                 {
                     tag: 'div',
                     classi: 'product-footer',
@@ -112,7 +113,7 @@
         };
 
         function creaElementoRicorsivo(nodo, datiProdotto, indiceProdotto) {
-            const el = document.createElement(nodo.tag);
+            let el = document.createElement(nodo.tag);
             if (nodo.classi) el.className = nodo.classi;
             
             if (nodo.tag === 'img' && nodo.chiaveSorgente) {
@@ -140,7 +141,7 @@
         }
 
         function aggiornaGrigliaProdotti() {
-            const contenitore = document.getElementById('lista-prodotti');
+            let contenitore = document.getElementById('lista-prodotti');
             if (!contenitore) return;
             contenitore.innerHTML = '';
             prodotti.forEach((p, i) => {
@@ -149,8 +150,8 @@
         }
 
         function aggiungiAlCarrello(indice) {
-            const prod = prodotti[indice];
-            const trovato = carrello.find(item => item.prodotto.nome === prod.nome);
+            let prod = prodotti[indice];
+            let trovato = carrello.find(item => item.prodotto.nome === prod.nome);
             if (trovato) {
                 trovato.quantita += 1;
             } else {
