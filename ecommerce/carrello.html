@@ -11,7 +11,7 @@
 
     <header>
         <div class="nav-container">
-            <a href="index.html" class="logo">ecommerce 🛒</a>
+            <a href="index.html" class="logo">ecommerce</a>
             <nav>
                 <a href="index.html">Prodotti</a>
                 <a href="registrazione.html">Registrati</a>
@@ -25,7 +25,7 @@
     </div>
 
     <main>
-        <h2 style="font-size: 1.5rem; font-weight: bold; border-bottom: 1px solid #d1d5db; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Il Tuo Carrello Spesa 🛍️</h2>
+        <h2 style="font-size: 1.5rem; font-weight: bold; border-bottom: 1px solid #d1d5db; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Carrello</h2>
         
         <div class="cart-layout">
             <div class="cart-items" id="carrello-articoli"></div>
@@ -33,7 +33,7 @@
             <div class="summary-box">
                 <h3 style="font-size: 1.15rem; font-weight: bold; margin-bottom: 1rem;">Riepilogo</h3>
                 <div class="summary-row">
-                    <span>Prodotti in cassa:</span>
+                    <span>prodotti</span>
                     <span id="tot-prodotti">0</span>
                 </div>
                 <div class="summary-total">
@@ -51,7 +51,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 ecommerce - Progetto Didattico.</p>
+        <p>&copy; 2026 ecommerce</p>
     </footer>
 
     <script>
@@ -70,21 +70,21 @@
         };
 
         function avviso(messaggio) {
-            const notifica = document.getElementById('notifica');
-            const testo = document.getElementById('testo-notifica');
+            let notifica = document.getElementById('notifica');
+            let testo = document.getElementById('testo-notifica');
             testo.innerText = messaggio;
             notifica.classList.remove('hidden');
             setTimeout(() => { notifica.classList.add('hidden'); }, 2000);
         }
 
         function aggiornaInterfacciaCarrello() {
-            const qtaTotale = carrello.reduce((acc, item) => acc + item.quantita, 0);
+            let qtaTotale = carrello.reduce((acc, item) => acc + item.quantita, 0);
             document.getElementById('num-carrello').innerText = qtaTotale;
             document.getElementById('tot-prodotti').innerText = qtaTotale;
 
-            const divArticoli = document.getElementById('carrello-articoli');
+            let divArticoli = document.getElementById('carrello-articoli');
             if (carrello.length === 0) {
-                divArticoli.innerHTML = `<p style="color: #9ca3af; font-style: italic; font-size: 0.875rem;">Il carrello è vuoto. Torna alla lista dei prodotti per aggiungere articoli.</p>`;
+                divArticoli.innerHTML = `<p style="color: #9ca3af; font-style: italic; font-size: 0.875rem;">Il carrello è vuoto</p>`;
                 document.getElementById('tot-prezzo').innerText = "0.00 €";
                 return;
             }
@@ -95,7 +95,7 @@
                 let subtotale = item.prodotto.prezzo * item.quantita;
                 somma += subtotale;
 
-                const riga = document.createElement('div');
+                let riga = document.createElement('div');
                 riga.className = 'cart-item';
                 riga.innerHTML = `
                     <div class="cart-item-info">
@@ -134,13 +134,13 @@
             }
 
             try {
-                const { jsPDF } = window.jspdf;
-                var doc = new jsPDF(); 
+                let { jsPDF } = window.jspdf;
+                let doc = new jsPDF(); 
 
                 doc.setFont("helvetica", "bold"); 
                 doc.setFontSize(20);
                 
-                doc.text("EDUSHOP S.R.L. - SCONTRINO ACQUISTO", 20, 20);
+                doc.text("SCONTRINO ACQUISTO", 20, 20);
 
                 doc.line(20, 25, 190, 25);
 
