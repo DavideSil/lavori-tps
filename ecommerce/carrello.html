@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduShop - Carrello Spesa</title>
+    <title>ecommerce - Carrello</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -11,7 +11,7 @@
 
     <header>
         <div class="nav-container">
-            <a href="index.html" class="logo">EduShop 🛒</a>
+            <a href="index.html" class="logo">ecommerce 🛒</a>
             <nav>
                 <a href="index.html">Prodotti</a>
                 <a href="registrazione.html">Registrati</a>
@@ -43,13 +43,7 @@
 
                 <div style="margin-top: 1.5rem;">
                     <button onclick="concludiAcquisto()" class="btn-cart-action btn-blue">
-                        Acquista (Genera Scontrino PDF)
-                    </button>
-                    <button onclick="scaricaCSVOrdine()" class="btn-cart-action btn-green">
-                        Salva Ordine (Genera CSV)
-                    </button>
-                    <button onclick="svuotaCarrello()" class="btn-cart-action btn-gray">
-                        Svuota Carrello
+                        Acquista
                     </button>
                 </div>
             </div>
@@ -57,7 +51,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 EduShop - Progetto Ecommerce Didattico.</p>
+        <p>&copy; 2026 ecommerce - Progetto Didattico.</p>
     </footer>
 
     <script>
@@ -68,16 +62,7 @@
             cognome: "Generico",
             indirizzo: "Via delle Scuole, 10",
             cap: "20100",
-            citta: "Milano",
-            provincia: "Milano",
-            email: "studente@classe5.edu",
-            codiceFiscale: "STDGNC08A01F205X",
-            dataNascita: "2008-01-01",
-            anno: 2008,
-            generazione: "Generazione Z",
-            sesso: "Maschio",
-            mezzi: "Bici",
-            materia: "Informatica"
+            email: "studente@classe5.edu"
         };
 
         window.onload = function() {
@@ -140,7 +125,6 @@
             carrello = [];
             localStorage.setItem("carrello", JSON.stringify(carrello));
             aggiornaInterfacciaCarrello();
-            avviso("Carrello svuotato.");
         }
 
         function concludiAcquisto() {
@@ -168,26 +152,21 @@
                 
                 doc.setFont("helvetica", "normal");
                 doc.text("INDIRIZZO:", 20, 42);
-                doc.text(utenteLoggato.indirizzo + " (CAP: " + utenteLoggato.cap + " - " + (utenteLoggato.citta || "") + ")", 45, 42);
+                doc.text(utenteLoggato.indirizzo + " (CAP: " + utenteLoggato.cap + ")", 45, 42);
                 
-                doc.text("C.F. / EMAIL:", 20, 49);
-                doc.text(utenteLoggato.codiceFiscale + " | " + utenteLoggato.email, 45, 49);
+                doc.text("EMAIL:", 20, 49);
+                doc.text(utenteLoggato.email, 45, 49);
 
-                if (utenteLoggato.generazione) {
-                    doc.text("GENERAZIONE:", 20, 56);
-                    doc.text(utenteLoggato.generazione + " (Anno: " + utenteLoggato.anno + ")", 50, 56);
-                }
-
-                doc.line(20, 60, 190, 60);
+                doc.line(20, 55, 190, 55);
 
                 doc.setFont("helvetica", "bold");
-                doc.text("Articolo", 20, 68);
-                doc.text("Q.ta", 110, 68);
-                doc.text("Prezzo Unitario", 130, 68);
-                doc.text("Totale", 170, 68);
-                doc.line(20, 72, 190, 72);
+                doc.text("Articolo", 20, 63);
+                doc.text("Q.ta", 110, 63);
+                doc.text("Prezzo Unitario", 130, 63);
+                doc.text("Totale", 170, 63);
+                doc.line(20, 67, 190, 67);
 
-                let y = 80;
+                let y = 75;
                 let totaleComplessivo = 0;
                 doc.setFont("helvetica", "normal");
 
@@ -215,51 +194,14 @@
                 doc.setFontSize(10);
                 doc.text("Questo scontrino e' valido esclusivamente per uso didattico scolastico.", 20, y);
 
-                doc.save("Scontrino_EduShop.pdf");
+                doc.save("Scontrino_ecommerce.pdf");
 
-                avviso("Scontrino PDF generato!");
+                svuotaCarrello();
+                avviso("Acquisto completato! PDF Scaricato.");
             } catch (err) {
                 console.error(err);
                 avviso("Errore durante la creazione del PDF.");
             }
-        }
-
-        function scaricaCSVOrdine() {
-            if (carrello.length === 0) {
-                avviso("Il carrello è vuoto!");
-                return;
-            }
-
-            const intestazioni = ["NomeCliente", "CognomeCliente", "EMAIL", "CodiceFiscale", "Prodotto", "Marca", "Quantita", "PrezzoUnitario", "PrezzoTotale"];
-            let righeCsv = [];
-            
-            righeCsv.push(intestazioni.join(";"));
-
-            carrello.forEach(item => {
-                let rigaTotale = item.prodotto.prezzo * item.quantita;
-                
-                let riga = [
-                    `"${utenteLoggato.nome}"`,
-                    `"${utenteLoggato.cognome}"`,
-                    `"${utenteLoggato.email}"`,
-                    `"${utenteLoggato.codiceFiscale}"`,
-                    `"${item.prodotto.nome}"`,
-                    `"${item.prodotto.marca}"`,
-                    item.quantita,
-                    item.prodotto.prezzo.toFixed(2),
-                    rigaTotale.toFixed(2)
-                ];
-                righeCsv.push(riga.join(";"));
-            });
-
-            const contenutoCsv = righeCsv.join("\n");
-            const blob = new Blob([contenutoCsv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `Ordine_${utenteLoggato.cognome}_EduShop.csv`;
-            link.click();
-            
-            avviso("File CSV dell'ordine scaricato!");
         }
     </script>
 </body>
