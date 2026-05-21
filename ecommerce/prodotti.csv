@@ -1,0 +1,4 @@
+nome;marca;descrizione;immagine;prezzo;dimensioni;taglio;giorni_di_viaggio;provenienza;categoria
+"Computer Portatile";"TechCorp";"PC portatile ad alte prestazioni per studio e lavoro.";"https://images.unsplash.com/photo-1496181130204-755241544e35?auto=format&fit=crop&w=400&q=80";599.00;"15 pollici";"Standard";"";"UE";"Tecnologia"
+"Telefono Smartphone";"MobileTech";"Smartphone di ultima generazione con schermo ultra nitido.";"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80";299.00;"128GB";"Unico";"";"UE";"Tecnologia"
+"Cuffie Wireless";"Klang";"Cuffie stereo senza fili con ricarica rapida.";"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80";49.00;"Standard";"Unico";"";"UE";"Tecnologia"
