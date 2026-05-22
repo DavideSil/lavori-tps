@@ -34,56 +34,59 @@
     <footer></footer>
 
     <script>
-        let prodotti = [
-            {
-                nome: "Computer Portatile",
-                marca: "TechCorp",
-                descrizione: "PC portatile ad alte prestazioni per studio e lavoro.",
-                immagine: "https://images.unsplash.com/photo-1496181130204-755241544e35?auto=format&fit=crop&w=400&q=80",
-                prezzo: 599.00,
-                dimensions: "15 pollici",
-                taglio: "Standard",
-                giorni_di_viaggio: "",
-                provenienza: "UE",
-                categoria: "Tecnologia"
-            },
-            {
-                nome: "Telefono Smartphone",
-                marca: "MobileTech",
-                descrizione: "Smartphone di ultima generazione con schermo ultra nitido.",
-                immagine: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80",
-                prezzo: 299.00,
-                dimensions: "128GB",
-                taglio: "Unico",
-                giorni_di_viaggio: "",
-                provenienza: "UE",
-                categoria: "Tecnologia"
-            },
-            {
-                nome: "Cuffie Wireless",
-                marca: "Klang",
-                descrizione: "Cuffie stereo senza fili con ricarica rapida.",
-                immagine: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80",
-                prezzo: 49.00,
-                dimensions: "Standard",
-                taglio: "Unico",
-                giorni_di_viaggio: "",
-                provenienza: "UE",
-                categoria: "Tecnologia"
-            }
-        ];
+        // Sostituito l'array fisso con una stringa in formato CSV
+        // La prima riga rappresenta l'intestazione (i campi dell'oggetto)
+        const prodottiCSV = `nome;marca;descrizione;immagine;prezzo;dimensions;taglio;giorni_di_viaggio;provenienza;categoria
+Computer Portatile;TechCorp;PC portatile ad alte prestazioni per studio e lavoro.;https://images.unsplash.com/photo-1496181130204-755241544e35?auto=format&fit=crop&w=400&q=80;599.00;15 pollici;Standard;;UE;Tecnologia
+Telefono Smartphone;MobileTech;Smartphone di ultima generazione con schermo ultra nitido.;https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80;299.00;128GB;Unico;;UE;Tecnologia
+Cuffie Wireless;Klang;Cuffie stereo senza fili con ricarica rapida.;https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80;49.00;Standard;Unico;;UE;Tecnologia
+Smartwatch Fitness;FitLife;Orologio con cardiofrequenzimetro e tracciamento GPS.;https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=400&q=80;89.00;Unica;Unico;;UE;Elettronica
+Tastiera Meccanica;KeyClick;Tastiera retroilluminata RGB con switch rossi lineari.;https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=400&q=80;69.99;Standard;Standard;;UE;Tecnologia
+Monitor Gaming;VisionX;Monitor da 27 pollici 144Hz ideale per il gaming.;https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=400&q=80;199.50;27 pollici;Standard;;UE;Tecnologia`;
 
+        let prodotti = [];
         let carrello = JSON.parse(localStorage.getItem("carrello")) || [];
 
         window.onload = function() {
+            // Convertiamo il CSV in array prima di aggiornare la griglia
+            prodotti = parseCSV(prodottiCSV);
             aggiornaGrigliaProdotti();
             aggiornaBadgeCarrello();
         };
 
+        // Funzione per convertire la stringa CSV in un array di oggetti JavaScript
+        function parseCSV(text) {
+            let linee = text.trim().split("\n");
+            // Estraiamo le intestazioni dalla prima riga (nome, marca, descrizione...)
+            let intestazioni = linee[0].split(";").map(header => header.trim());
+            let risultato = [];
+
+            for (let i = 1; i < linee.length; i++) {
+                if (!linee[i].trim()) continue; // Salta le righe vuote
+                
+                let valoriCorrenti = linee[i].split(";");
+                let oggettoProdotto = {};
+
+                intestazioni.forEach((intestazione, indice) => {
+                    let valore = valoriCorrenti[indice] ? valoriCorrenti[indice].trim() : "";
+                    
+                    // Convertiamo il prezzo in un numero float per i calcoli
+                    if (intestazione === "prezzo") {
+                        valore = parseFloat(valore) || 0;
+                    }
+                    
+                    oggettoProdotto[intestazione] = valore;
+                });
+
+                risultato.push(oggettoProdotto);
+            }
+            return risultato;
+        }
+
         function avviso(messaggio) {
             let notifica = document.getElementById('notifica');
             let testo = document.getElementById('testo-notifica');
-            testo.innerText = messaggio;
+            texto.innerText = messaggio;
             notifica.classList.remove('hidden');
             setTimeout(() => { notifica.classList.add('hidden'); }, 2000);
         }
