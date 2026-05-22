@@ -1,0 +1,7 @@
+nome;marca;descrizione;immagine;prezzo;dimensions;taglio;giorni_di_viaggio;provenienza;categoria
+Computer Portatile;TechCorp;PC portatile ad alte prestazioni per studio e lavoro.;https://images.unsplash.com/photo-1496181130204-755241544e35?auto=format&fit=crop&w=400&q=80;599.00;15 pollici;Standard;;UE;Tecnologia
+Telefono Smartphone;MobileTech;Smartphone di ultima generazione con schermo ultra nitido.;https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80;299.00;128GB;Unico;;UE;Tecnologia
+Cuffie Wireless;Klang;Cuffie stereo senza fili con ricarica rapida.;https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80;49.00;Standard;Unico;;UE;Tecnologia
+Smartwatch Fitness;FitLife;Orologio con cardiofrequenzimetro e tracciamento GPS.;https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=400&q=80;89.00;Unica;Unico;;UE;Elettronica
+Tastiera Meccanica;KeyClick;Tastiera retroilluminata RGB con switch rossi lineari.;https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=400&q=80;69.99;Standard;Standard;;UE;Tecnologia
+Monitor Gaming;VisionX;Monitor da 27 pollici 144Hz ideale per il gaming.;https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=400&q=80;199.50;27 pollici;Standard;;UE;Tecnologia
