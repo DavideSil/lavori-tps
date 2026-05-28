@@ -119,8 +119,9 @@
                 doc.setFontSize(20);
                 doc.text("RICEVUTA ACQUISTO", 20, 20);
 
+                doc.line(20, 25, 190, 25);
 
-            
+                let y = 35;
                 let totaleComplessivo = 0;
                 doc.setFont("helvetica", "normal");
                 doc.setFontSize(12);
@@ -133,7 +134,8 @@
                     y += 10;
                 });
 
-         
+                doc.line(20, y, 190, y);
+                y += 15;
 
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(14);
