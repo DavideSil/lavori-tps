@@ -54,7 +54,10 @@
 
     <script>
         let carrello = JSON.parse(localStorage.getItem("carrello")) || [];
-        
+
+        window.onload = function() {
+            aggiornaInterfacciaCarrello();
+        };
 
         function aggiornaInterfacciaCarrello() {
             let qtaTotale = carrello.reduce((acc, item) => acc + item.quantita, 0);
