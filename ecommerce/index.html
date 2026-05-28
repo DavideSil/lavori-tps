@@ -52,12 +52,11 @@ Monitor Gaming;VisionX;Monitor da 27 pollici 144Hz ideale per il gaming.;https:/
         };
         function parseCSV(text) {
             let linee = text.trim().split("\n");
-            // Estraiamo le intestazioni dalla prima riga (nome, marca, descrizione...)
             let intestazioni = linee[0].split(";").map(header => header.trim());
             let risultato = [];
 
             for (let i = 1; i < linee.length; i++) {
-                if (!linee[i].trim()) continue; // Salta le righe vuote
+                if (!linee[i].trim()) continue;
                 
                 let valoriCorrenti = linee[i].split(";");
                 let oggettoProdotto = {};
@@ -65,7 +64,6 @@ Monitor Gaming;VisionX;Monitor da 27 pollici 144Hz ideale per il gaming.;https:/
                 intestazioni.forEach((intestazione, indice) => {
                     let valore = valoriCorrenti[indice] ? valoriCorrenti[indice].trim() : "";
                     
-                    // Convertiamo il prezzo in un numero float per i calcoli
                     if (intestazione === "prezzo") {
                         valore = parseFloat(valore) || 0;
                     }
