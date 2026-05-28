@@ -68,8 +68,6 @@
         </div>
     </main>
 
-    <footer></footer>
-
     <script>
         let carrello = JSON.parse(localStorage.getItem("carrello")) || [];
         document.getElementById('num-carrello').innerText = carrello.reduce((acc, item) => acc + item.quantita, 0);
