@@ -55,25 +55,6 @@
     <script>
         let carrello = JSON.parse(localStorage.getItem("carrello")) || [];
         
-        let utenteLoggato = JSON.parse(localStorage.getItem("utenteLoggato")) || {
-            nome: "Studente",
-            cognome: "Generico",
-            indirizzo: "Via delle Scuole, 10",
-            cap: "20100",
-            email: "studente@classe5.edu"
-        };
-
-        window.onload = function() {
-            aggiornaInterfacciaCarrello();
-        };
-
-        function avviso(messaggio) {
-            let notifica = document.getElementById('notifica');
-            let testo = document.getElementById('testo-notifica');
-            testo.innerText = messaggio;
-            notifica.classList.remove('hidden');
-            setTimeout(() => { notifica.classList.add('hidden'); }, 2000);
-        }
 
         function aggiornaInterfacciaCarrello() {
             let qtaTotale = carrello.reduce((acc, item) => acc + item.quantita, 0);
